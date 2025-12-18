@@ -2,12 +2,15 @@ package org.example.lab5;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Registry that tracks which group each student belongs to.
  * Ensures that each student can only belong to one group at a time.
  */
 public class GroupRegistry {
+    private static final Logger log = LogManager.getLogger(GroupRegistry.class);
     private static final Map<String, String> studentToGroup = new HashMap<>();
     
     /**
@@ -38,6 +41,7 @@ public class GroupRegistry {
      */
     static void assign(String studentId, String groupName) {
         studentToGroup.put(studentId, groupName);
+        log.info("Assigned personId={} to group={}", studentId, groupName);
     }
     
     /**
@@ -46,7 +50,11 @@ public class GroupRegistry {
      * @param studentId the student's ID
      */
     static void unassign(String studentId) {
-        studentToGroup.remove(studentId);
+        if (studentToGroup.remove(studentId) != null) {
+            log.debug("Unassigned personId={} from registry", studentId);
+        } else {
+            log.warn("Attempt to unassign non-registered personId={}", studentId);
+        }
     }
     
     /**

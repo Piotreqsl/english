@@ -4,12 +4,16 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Represents a group of students.
  */
 public class Group {
+    private static final Logger log = LogManager.getLogger(Group.class);
     private final String name;
     private final String description;
     private final Set<Student> members;
@@ -24,6 +28,7 @@ public class Group {
         this.name = name;
         this.description = description;
         this.members = new HashSet<>();
+        log.info("Group created: name='{}', description='{}'", name, description);
     }
     
     /**
@@ -57,15 +62,21 @@ public class Group {
         if (GroupRegistry.isAssigned(studentId)) {
             String assignedGroup = GroupRegistry.getGroupName(studentId);
             if (!assignedGroup.equals(this.name)) {
+                log.warn("Cannot add student id={} to group='{}' — already in group='{}'",
+                    studentId, name, assignedGroup);
                 return false; // Student is in a different group
             }
             // Student is already in this group, no need to add again
+            log.debug("Student index={} already in group='{}'", student.getIndexNumber(), name);
             return true;
         }
         
-        members.add(student);
-        GroupRegistry.assign(studentId, this.name);
-        return true;
+        boolean added = members.add(student);
+        if (added) {
+            GroupRegistry.assign(studentId, this.name);
+            log.info("Student index={} added to group='{}'", student.getIndexNumber(), name);
+        }
+        return added;
     }
     
     /**
@@ -78,6 +89,10 @@ public class Group {
         boolean removed = members.remove(student);
         if (removed) {
             GroupRegistry.unassign(student.getId());
+            log.info("Student index={} removed from group='{}'", student.getIndexNumber(), name);
+        } else {
+            log.warn("Attempt to remove not-member index={} from group='{}'",
+                student.getIndexNumber(), name);
         }
         return removed;
     }
@@ -112,6 +127,9 @@ public class Group {
      * @throws IOException if an I/O error occurs
      */
     public void exportToCsv(Path file, String delimiter) throws IOException {
+        log.info("Exporting {} students from group='{}' to file={}",
+            members.size(), name, file);
+        
         List<String> lines = new ArrayList<>();
         
         for (Student student : members) {
@@ -128,10 +146,17 @@ public class Group {
                 gradesString
             );
             
+            log.debug("CSV line: {}", line);
             lines.add(line);
         }
         
-        Files.write(file, lines);
+        try {
+            Files.write(file, lines);
+            log.info("Export successful: {} lines written to {}", lines.size(), file);
+        } catch (IOException e) {
+            log.error("Export failed for file={}: {}", file, e.getMessage());
+            throw e;
+        }
     }
     
     /**
@@ -139,8 +164,9 @@ public class Group {
      * 
      * @param file the path to the input file
      * @throws IOException if an I/O error occurs
+     * @throws CsvFormatException if the CSV format is invalid
      */
-    public void importFromCsv(Path file) throws IOException {
+    public void importFromCsv(Path file) throws IOException, CsvFormatException {
         importFromCsv(file, ";");
     }
     
@@ -152,19 +178,26 @@ public class Group {
      * @param file the path to the input file
      * @param delimiter the CSV delimiter
      * @throws IOException if an I/O error occurs
+     * @throws CsvFormatException if the CSV format is invalid
      */
-    public void importFromCsv(Path file, String delimiter) throws IOException {
+    public void importFromCsv(Path file, String delimiter) throws IOException, CsvFormatException {
+        log.info("Importing students into group='{}' from file={}", name, file);
+        
         List<String> lines = Files.readAllLines(file);
+        int imported = 0;
         
         for (String line : lines) {
             if (line.trim().isEmpty()) {
                 continue;
             }
             
-            String[] parts = line.split(delimiter, -1);
+            log.debug("Raw CSV line: {}", line);
+            
+            String[] parts = line.split(Pattern.quote(delimiter), -1);
             if (parts.length != 6) {
-                System.err.println("Skipping malformed line: " + line);
-                continue;
+                String msg = "Malformed CSV line (expected 6 fields): " + line;
+                log.error(msg);
+                throw new CsvFormatException(msg);
             }
             
             try {
@@ -189,17 +222,23 @@ public class Group {
                                 double grade = Double.parseDouble(gradeStr.trim());
                                 student.addGrade(grade);
                             } catch (IllegalArgumentException e) {
-                                System.err.println("Invalid grade: " + gradeStr);
+                                log.warn("Invalid grade: {} in line: {}", gradeStr, line);
                             }
                         }
                     }
                 }
                 
-                addStudent(student);
+                if (addStudent(student)) {
+                    imported++;
+                }
             } catch (Exception e) {
-                System.err.println("Error parsing line: " + line + " - " + e.getMessage());
+                String msg = "Error parsing CSV line: " + line;
+                log.error(msg, e);
+                throw new CsvFormatException(msg, e);
             }
         }
+        
+        log.info("Import finished: {} students imported into group='{}'", imported, name);
     }
     
     /**

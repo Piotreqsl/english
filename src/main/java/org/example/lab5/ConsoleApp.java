@@ -6,6 +6,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Repository for managing students in memory.
@@ -65,6 +67,7 @@ class GroupRepository {
  * Handles CSV operations for students.
  */
 class CsvStudentHandler {
+    private static final Logger log = LogManager.getLogger(CsvStudentHandler.class);
     public static void saveStudents(Collection<Student> students, Path file, String delimiter) throws IOException {
         List<String> lines = new ArrayList<>();
         
@@ -99,8 +102,8 @@ class CsvStudentHandler {
             }
             
             String[] parts = line.split(delimiter, -1);
-            if (parts.length < 6) {
-                System.err.println("Skipping malformed line: " + line);
+            if (parts.length < 7) {
+                log.warn("Skipping malformed line (expected 7 fields): {}", line);
                 continue;
             }
             
@@ -124,7 +127,7 @@ class CsvStudentHandler {
                                 double grade = Double.parseDouble(gradeStr.trim());
                                 student.addGrade(grade);
                             } catch (IllegalArgumentException e) {
-                                System.err.println("Invalid grade: " + gradeStr);
+                                log.warn("Invalid grade '{}' in line: {}", gradeStr, line);
                             }
                         }
                     }
@@ -132,7 +135,7 @@ class CsvStudentHandler {
                 
                 students.add(student);
             } catch (Exception e) {
-                System.err.println("Error parsing line: " + line + " - " + e.getMessage());
+                log.error("Error parsing line: {} - {}", line, e.getMessage(), e);
             }
         }
         
@@ -144,6 +147,7 @@ class CsvStudentHandler {
  * Handles CSV operations for groups.
  */
 class CsvGroupHandler {
+    private static final Logger log = LogManager.getLogger(CsvGroupHandler.class);
     public static void saveGroups(Collection<Group> groups, Path file, String delimiter) throws IOException {
         List<String> lines = new ArrayList<>();
         
@@ -175,7 +179,7 @@ class CsvGroupHandler {
             
             String[] parts = line.split(delimiter, -1);
             if (parts.length < 3) {
-                System.err.println("Skipping malformed line: " + line);
+                log.warn("Skipping malformed group line (expected 3 fields): {}", line);
                 continue;
             }
             
@@ -196,7 +200,7 @@ class CsvGroupHandler {
                             if (student != null) {
                                 group.addStudent(student);
                             } else {
-                                System.err.println("Warning: Student with ID " + id + " not found");
+                                log.warn("Student with ID {} not found", id.trim());
                             }
                         }
                     }
@@ -204,7 +208,7 @@ class CsvGroupHandler {
                 
                 groups.add(group);
             } catch (Exception e) {
-                System.err.println("Error parsing line: " + line + " - " + e.getMessage());
+                log.error("Error parsing group line: {} - {}", line, e.getMessage(), e);
             }
         }
         
@@ -216,6 +220,7 @@ class CsvGroupHandler {
  * Manages application configuration using a properties file.
  */
 class ConfigManager {
+    private static final Logger log = LogManager.getLogger(ConfigManager.class);
     private static final String CONFIG_FILE = "console.properties";
     private Properties properties;
     
@@ -230,13 +235,15 @@ class ConfigManager {
         if (Files.exists(configPath)) {
             try {
                 properties.load(Files.newInputStream(configPath));
+                log.info("Loaded configuration from {}", CONFIG_FILE);
             } catch (IOException e) {
-                System.err.println("Error loading configuration: " + e.getMessage());
+                log.error("Error loading configuration: {}", e.getMessage());
                 setDefaults();
             }
         } else {
             setDefaults();
             saveConfig();
+            log.info("Created default configuration: {}", CONFIG_FILE);
             System.out.println("[INFO] Created default configuration: " + CONFIG_FILE);
         }
         
@@ -262,8 +269,9 @@ class ConfigManager {
         try {
             properties.store(Files.newOutputStream(Paths.get(CONFIG_FILE)),
                 "Student & Group Manager Configuration");
+            log.debug("Configuration saved to {}", CONFIG_FILE);
         } catch (IOException e) {
-            System.err.println("Error saving configuration: " + e.getMessage());
+            log.error("Error saving configuration: {}", e.getMessage());
         }
     }
     
@@ -306,6 +314,7 @@ class ConfigManager {
  * Console application for managing students and groups (Task 7).
  */
 public class ConsoleApp {
+    private static final Logger log = LogManager.getLogger(ConsoleApp.class);
     private final Scanner scanner;
     private final StudentRepository studentRepo;
     private final GroupRepository groupRepo;
@@ -319,25 +328,39 @@ public class ConsoleApp {
     }
     
     public static void main(String[] args) {
-        ConsoleApp app = new ConsoleApp();
-        app.run();
+        log.info("Application starting...");
+        
+        try {
+            ConsoleApp app = new ConsoleApp();
+            app.run();
+        } catch (Exception e) {
+            log.error("Unexpected fatal error in main()", e);
+            System.err.println("Fatal error, see logs for details: " + e.getMessage());
+        }
+        
+        log.info("Application exiting.");
     }
     
     public void run() {
+        log.debug("Starting main application loop");
+        
         while (true) {
             showMenu();
             int choice = readInt("Select option: ");
+            log.debug("User selected menu option '{}'", choice);
             
             try {
                 if (!handleChoice(choice)) {
                     break;
                 }
             } catch (Exception e) {
+                log.error("Error handling menu option {}", choice, e);
                 System.err.println("Error: " + e.getMessage());
             }
         }
         
         scanner.close();
+        log.info("User exited application");
         System.out.println("Goodbye!");
     }
     
@@ -385,15 +408,18 @@ public class ConsoleApp {
         Path file = Paths.get(filename);
         
         if (!Files.exists(file)) {
+            log.warn("Student file not found: {}", filename);
             System.out.println("File not found: " + filename);
             return;
         }
         
+        log.info("Loading students from file: {}", filename);
         List<Student> students = CsvStudentHandler.loadStudents(file, config.getDelimiter());
         for (Student student : students) {
             studentRepo.add(student);
         }
         
+        log.info("Successfully imported {} students", students.size());
         System.out.println("Imported " + students.size() + " students from " + filename);
     }
     
@@ -402,15 +428,18 @@ public class ConsoleApp {
         Path file = Paths.get(filename);
         
         if (!Files.exists(file)) {
+            log.warn("Groups file not found: {}", filename);
             System.out.println("File not found: " + filename);
             return;
         }
         
+        log.info("Loading groups from file: {}", filename);
         List<Group> groups = CsvGroupHandler.loadGroups(file, config.getDelimiter(), studentRepo);
         for (Group group : groups) {
             groupRepo.add(group);
         }
         
+        log.info("Successfully imported {} groups", groups.size());
         System.out.println("Imported " + groups.size() + " groups from " + filename);
     }
     
@@ -418,7 +447,9 @@ public class ConsoleApp {
         String filename = config.getStudentsFile();
         Path file = Paths.get(filename);
         
+        log.info("Saving {} students to file: {}", studentRepo.size(), filename);
         CsvStudentHandler.saveStudents(studentRepo.getAll(), file, config.getDelimiter());
+        log.info("Successfully exported {} students", studentRepo.size());
         System.out.println("Exported " + studentRepo.size() + " students to " + filename);
     }
     
@@ -426,7 +457,9 @@ public class ConsoleApp {
         String filename = config.getGroupsFile();
         Path file = Paths.get(filename);
         
+        log.info("Saving {} groups to file: {}", groupRepo.getAll().size(), filename);
         CsvGroupHandler.saveGroups(groupRepo.getAll(), file, config.getDelimiter());
+        log.info("Successfully exported {} groups", groupRepo.getAll().size());
         System.out.println("Exported " + groupRepo.getAll().size() + " groups to " + filename);
     }
     
@@ -447,6 +480,7 @@ public class ConsoleApp {
         Student student = new Student(firstName, lastName, birthDate, gender, indexNumber);
         studentRepo.add(student);
         
+        log.info("New student added via console: {} {} (ID: {})", firstName, lastName, student.getId());
         System.out.println("Student added with ID: " + student.getId());
         
         // Option to add grades
@@ -481,6 +515,7 @@ public class ConsoleApp {
         Group group = new Group(name, description);
         groupRepo.add(group);
         
+        log.info("New group created via console: {}", name);
         System.out.println("Group created: " + group);
     }
     

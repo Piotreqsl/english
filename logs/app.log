@@ -1,0 +1,8 @@
+2025-12-18 16:14:00 INFO  org.example.lab5.ConsoleApp - Application starting...
+2025-12-18 16:14:00 DEBUG org.example.lab5.ConsoleApp - Starting main application loop
+2025-12-18 16:14:13 DEBUG org.example.lab5.ConsoleApp - User selected menu option '9'
+2025-12-18 16:19:35 INFO  org.example.lab5.ConsoleApp - Application starting...
+2025-12-18 16:19:35 DEBUG org.example.lab5.ConsoleApp - Starting main application loop
+2025-12-18 16:19:41 DEBUG org.example.lab5.ConsoleApp - User selected menu option '1'
+2025-12-18 16:19:41 INFO  org.example.lab5.ConsoleApp - Loading students from file: students.csv
+2025-12-18 16:19:41 INFO  org.example.lab5.ConsoleApp - Successfully imported 0 students

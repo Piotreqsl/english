@@ -4,11 +4,14 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.atomic.AtomicLong;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Represents a person with basic information including name, birth date, gender, and unique ID.
  */
 public class Person {
+    private static final Logger log = LogManager.getLogger(Person.class);
     private static final AtomicLong ID_COUNTER = new AtomicLong(0);
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     
@@ -32,6 +35,9 @@ public class Person {
         this.birthDate = LocalDate.parse(birthDate, DATE_FORMATTER);
         this.gender = gender;
         this.id = generateId();
+        
+        log.debug("Created Person id={} name={} {} birth={} gender={}",
+            id, firstName, lastName, birthDate, gender);
     }
     
     /**
@@ -42,7 +48,9 @@ public class Person {
     private String generateId() {
         long value = ID_COUNTER.incrementAndGet();
         String base36 = Long.toString(value, 36).toUpperCase();
-        return String.format("%7s", base36).replace(' ', '0');
+        String result = String.format("%7s", base36).replace(' ', '0');
+        log.trace("Generated base36 id={} from n={}", result, value);
+        return result;
     }
     
     /**
@@ -105,7 +113,9 @@ public class Person {
      * @return the age in years
      */
     public int getAgeYears() {
-        return Period.between(birthDate, LocalDate.now()).getYears();
+        int age = Period.between(birthDate, LocalDate.now()).getYears();
+        log.trace("Computed age for {} {}: {} years", firstName, lastName, age);
+        return age;
     }
     
     /**

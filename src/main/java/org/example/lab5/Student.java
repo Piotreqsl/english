@@ -5,11 +5,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.OptionalDouble;
 import java.util.Set;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Represents a student, extending the Person class with academic information.
  */
 public class Student extends Person {
+    private static final Logger log = LogManager.getLogger(Student.class);
     private static final Set<Double> VALID_GRADES = new HashSet<>();
     
     static {
@@ -37,6 +40,7 @@ public class Student extends Person {
         super(firstName, lastName, birthDate, gender);
         this.indexNumber = indexNumber;
         this.grades = new ArrayList<>();
+        log.info("New Student created: index={} personId={}", indexNumber, getId());
     }
     
     /**
@@ -66,11 +70,14 @@ public class Student extends Person {
      */
     public void addGrade(double grade) {
         if (!VALID_GRADES.contains(grade)) {
+            log.error("Attempt to add invalid grade={} for student index={}", grade, indexNumber);
             throw new IllegalArgumentException(
                 "Invalid grade: " + grade + ". Valid grades are: 2.0, 3.0, 3.5, 4.0, 4.5, 5.0"
             );
         }
         grades.add(grade);
+        log.debug("Added grade={} to student index={} (now {} grades)",
+            grade, indexNumber, grades.size());
     }
     
     /**
@@ -80,13 +87,16 @@ public class Student extends Person {
      */
     public OptionalDouble average() {
         if (grades.isEmpty()) {
+            log.trace("Computed average for index={}: no grades", indexNumber);
             return OptionalDouble.empty();
         }
         double sum = 0;
         for (double grade : grades) {
             sum += grade;
         }
-        return OptionalDouble.of(sum / grades.size());
+        double avg = sum / grades.size();
+        log.trace("Computed average for index={}: {}", indexNumber, avg);
+        return OptionalDouble.of(avg);
     }
     
     /**
