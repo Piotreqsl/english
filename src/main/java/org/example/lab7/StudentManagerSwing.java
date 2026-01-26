@@ -13,10 +13,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.time.format.DateTimeParseException;
-import java.util.*;
-import java.util.List;
 
 /**
  * Main GUI application for Student & Group Manager using Swing (Lab 7).
@@ -29,6 +26,11 @@ public class StudentManagerSwing extends JFrame {
     private final StudentRepository studentRepo;
     private final GroupRepository groupRepo;
     private final ConfigManager config;
+
+    // Business logic services
+    private final StudentService studentService;
+    private final GroupService groupService;
+    private final CsvService csvService;
 
     // UI Components
     private DefaultListModel<String> groupListModel;
@@ -53,6 +55,11 @@ public class StudentManagerSwing extends JFrame {
         studentRepo = new StudentRepository();
         groupRepo = new GroupRepository();
         config = new ConfigManager();
+
+        // Initialize services (business logic layer)
+        studentService = new StudentService(studentRepo, groupRepo);
+        groupService = new GroupService(groupRepo);
+        csvService = new CsvService(studentRepo, groupRepo, config);
 
         // Setup main window
         setTitle("Student & Group Manager — Lab 7");
@@ -446,26 +453,19 @@ public class StudentManagerSwing extends JFrame {
             return;
         }
 
-        name = name.trim();
-
-        // Validation: check if group already exists
-        if (groupRepo.exists(name)) {
-            showError("Group with name '" + name + "' already exists.");
-            log.warn("Attempt to create duplicate group: {}", name);
-            return;
-        }
-
         String description = JOptionPane.showInputDialog(this, "Enter group description:", "Add Group", JOptionPane.PLAIN_MESSAGE);
         if (description == null) {
             description = "";
         }
 
         try {
-            Group group = new Group(name, description.trim());
-            groupRepo.add(group);
+            Group group = groupService.createGroup(name, description);
             refreshGroupList();
-            setStatus("Group '" + name + "' created successfully");
-            log.info("Group created via GUI: {}", name);
+            setStatus("Group '" + group.getName() + "' created successfully");
+            log.info("Group created via GUI: {}", group.getName());
+        } catch (IllegalStateException ex) {
+            showError(ex.getMessage());
+            log.warn("Failed to create group: {}", ex.getMessage());
         } catch (Exception ex) {
             showError("Failed to create group: " + ex.getMessage());
             log.error("Error creating group", ex);
@@ -496,13 +496,13 @@ public class StudentManagerSwing extends JFrame {
         }
 
         try {
-            // Update the description using the setter
-            group.setDescription(newDescription.trim());
+            groupService.updateGroupDescription(selectedGroupName, newDescription);
             setStatus("Group description updated");
             log.info("Description updated for group: {}", selectedGroupName);
-
-            // Optionally refresh the group list to reflect changes if displayed
             refreshGroupList();
+        } catch (IllegalArgumentException ex) {
+            showError(ex.getMessage());
+            log.warn("Failed to update group description: {}", ex.getMessage());
         } catch (Exception ex) {
             showError("Failed to update description: " + ex.getMessage());
             log.error("Error updating group description", ex);
@@ -534,16 +534,18 @@ public class StudentManagerSwing extends JFrame {
             if (result != JOptionPane.YES_OPTION) {
                 return;
             }
-
-            // Remove all students from the group
-            new ArrayList<>(group.getMembers()).forEach(group::removeStudent);
         }
 
-        groupRepo.getAll().removeIf(g -> g.getName().equals(selectedGroupName));
-        refreshGroupList();
-        refreshStudentTable();
-        setStatus("Group '" + selectedGroupName + "' removed");
-        log.info("Group removed via GUI: {}", selectedGroupName);
+        try {
+            int memberCount = groupService.removeGroup(selectedGroupName);
+            refreshGroupList();
+            refreshStudentTable();
+            setStatus("Group '" + selectedGroupName + "' removed (had " + memberCount + " member(s))");
+            log.info("Group removed via GUI: {}", selectedGroupName);
+        } catch (IllegalArgumentException ex) {
+            showError(ex.getMessage());
+            log.error("Error removing group", ex);
+        }
     }
 
     // ========== STUDENT OPERATIONS ==========
@@ -552,7 +554,7 @@ public class StudentManagerSwing extends JFrame {
         log.debug("User requested to add new student");
 
         try {
-            // Validate and collect data
+            // Collect data from form
             String firstName = firstNameField.getText().trim();
             String lastName = lastNameField.getText().trim();
             String birthDate = birthDateField.getText().trim();
@@ -560,70 +562,36 @@ public class StudentManagerSwing extends JFrame {
             String indexNumber = indexNumberField.getText().trim();
             String gradesText = gradesField.getText().trim();
 
-            // Validation
-            if (firstName.isEmpty() || lastName.isEmpty()) {
-                showError("First name and last name are required.");
-                return;
-            }
+            // Parse grades
+            double[] grades = StudentService.parseGrades(gradesText);
 
-            if (indexNumber.isEmpty()) {
-                showError("Index number is required.");
-                return;
-            }
-
-            // Check for duplicate index number
-            for (Student s : studentRepo.getAll()) {
-                if (s.getIndexNumber().equals(indexNumber)) {
-                    showError("Student with index number '" + indexNumber + "' already exists.");
-                    return;
-                }
-            }
-
-            // Create student (this validates birth date format)
-            Student student = new Student(firstName, lastName, birthDate, gender, indexNumber);
-
-            // Parse and add grades
-            if (!gradesText.isEmpty() && !gradesText.startsWith("e.g.")) {
-                String[] gradeStrings = gradesText.split("[,;\\s]+");
-                for (String gradeStr : gradeStrings) {
-                    try {
-                        double grade = Double.parseDouble(gradeStr.trim());
-                        student.addGrade(grade);
-                    } catch (NumberFormatException e) {
-                        showWarning("Invalid grade format: " + gradeStr + " (skipped)");
-                    } catch (IllegalArgumentException e) {
-                        showError("Invalid grade value: " + e.getMessage());
-                        return;
-                    }
-                }
-            }
-
-            // Add to repository
-            studentRepo.add(student);
-
-            // Optionally add to selected group
+            // Get selected group (optional)
             String selectedGroup = groupList.getSelectedValue();
-            if (selectedGroup != null) {
-                Group group = groupRepo.getByName(selectedGroup);
-                if (group != null) {
-                    if (group.addStudent(student)) {
-                        setStatus("Student '" + firstName + " " + lastName + "' added to group '" + selectedGroup + "'");
-                    } else {
-                        setStatus("Student added to repository (could not add to group)");
-                    }
-                }
+
+            // Use service to create student (handles all validation and business logic)
+            Student student = studentService.createStudent(
+                firstName, lastName, birthDate, gender, indexNumber, grades, selectedGroup
+            );
+
+            // Update UI
+            clearStudentForm();
+            refreshStudentTable();
+
+            // Show success message
+            if (selectedGroup != null && !selectedGroup.trim().isEmpty()) {
+                setStatus("Student '" + firstName + " " + lastName + "' added to group '" + selectedGroup + "'");
             } else {
                 setStatus("Student '" + firstName + " " + lastName + "' added to repository");
             }
 
-            // Clear form
-            clearStudentForm();
-
-            // Refresh UI
-            refreshStudentTable();
-
             log.info("Student added via GUI: {} {} (index: {})", firstName, lastName, indexNumber);
 
+        } catch (IllegalArgumentException e) {
+            showError(e.getMessage());
+            log.warn("Validation error: {}", e.getMessage());
+        } catch (IllegalStateException e) {
+            showError(e.getMessage());
+            log.warn("Business logic error: {}", e.getMessage());
         } catch (DateTimeParseException e) {
             showError("Invalid birth date format. Use DD.MM.YYYY (e.g., 15.03.2000)");
             log.warn("Invalid birth date format entered", e);
@@ -716,58 +684,18 @@ public class StudentManagerSwing extends JFrame {
                 Gender newGender = (Gender) genderEdit.getSelectedItem();
                 String newIndex = indexEdit.getText().trim();
 
-                // Validation
-                if (newFirstName.isEmpty() || newLastName.isEmpty() || newBirthDate.isEmpty() || newIndex.isEmpty()) {
-                    showError("All fields are required.");
-                    return;
-                }
-
-                // Check if index number changed and is already taken
-                if (!newIndex.equals(student.getIndexNumber())) {
-                    for (Student s : studentRepo.getAll()) {
-                        if (s.getIndexNumber().equals(newIndex) && !s.getId().equals(studentId)) {
-                            showError("Index number already exists: " + newIndex);
-                            return;
-                        }
-                    }
-                }
-
-                // Get current group membership
-                String groupName = GroupRegistry.getGroupName(studentId);
-                Group currentGroup = null;
-                if (groupName != null) {
-                    currentGroup = groupRepo.getByName(groupName);
-                }
-
-                // Remove old student from group
-                if (currentGroup != null) {
-                    currentGroup.removeStudent(student);
-                }
-
-                // Create new student with updated data
-                Student updatedStudent = new Student(newFirstName, newLastName, newBirthDate, newGender, newIndex);
-
-                // Copy grades from old student
-                for (Double grade : student.getGrades()) {
-                    updatedStudent.addGrade(grade);
-                }
-
-                // Remove old student from repository
-                studentRepo.remove(studentId);
-
-                // Add updated student to repository
-                studentRepo.add(updatedStudent);
-
-                // Re-add to group with new student object
-                if (currentGroup != null) {
-                    currentGroup.addStudent(updatedStudent);
-                }
+                // Use service to update student (handles all validation and business logic)
+                studentService.updateStudent(studentId, newFirstName, newLastName, newBirthDate, newGender, newIndex);
 
                 refreshStudentTable();
                 setStatus("Student updated successfully");
                 log.info("Student updated: old index={}, new index={}", student.getIndexNumber(), newIndex);
                 dialog.dispose();
 
+            } catch (IllegalArgumentException ex) {
+                showError(ex.getMessage());
+            } catch (IllegalStateException ex) {
+                showError(ex.getMessage());
             } catch (DateTimeParseException ex) {
                 showError("Invalid birth date format. Use DD.MM.YYYY (e.g., 15.03.2000)");
             } catch (Exception ex) {
@@ -812,21 +740,17 @@ public class StudentManagerSwing extends JFrame {
             return;
         }
 
-        // Remove from group if assigned
-        String groupName = GroupRegistry.getGroupName(studentId);
-        if (groupName != null) {
-            Group group = groupRepo.getByName(groupName);
-            if (group != null) {
-                group.removeStudent(student);
-            }
+        try {
+            // Use service to remove student (handles all business logic)
+            studentService.removeStudent(studentId);
+
+            refreshStudentTable();
+            setStatus("Student removed");
+            log.info("Student removed via GUI: {} {}", student.getFirstName(), student.getLastName());
+        } catch (Exception ex) {
+            showError("Failed to remove student: " + ex.getMessage());
+            log.error("Error removing student", ex);
         }
-
-        // Remove from repository
-        studentRepo.getAll().removeIf(s -> s.getId().equals(studentId));
-
-        refreshStudentTable();
-        setStatus("Student removed");
-        log.info("Student removed via GUI: {} {}", student.getFirstName(), student.getLastName());
     }
 
     private void viewEditGrades() {
@@ -886,7 +810,7 @@ public class StudentManagerSwing extends JFrame {
         addGradeButton.addActionListener(e -> {
             try {
                 double grade = Double.parseDouble(newGradeField.getText().trim());
-                student.addGrade(grade);
+                studentService.addGrade(studentId, grade);
                 gradesListModel.addElement(String.format("%.1f", grade));
                 newGradeField.setText("");
                 updateAverage.run();
@@ -925,13 +849,17 @@ public class StudentManagerSwing extends JFrame {
             );
 
             if (result == JOptionPane.YES_OPTION) {
-                if (student.removeGrade(selectedIndex)) {
-                    gradesListModel.remove(selectedIndex);
-                    updateAverage.run();
-                    refreshStudentTable();
-                    log.info("Grade at index {} removed from student {}", selectedIndex, student.getIndexNumber());
-                } else {
-                    showError("Failed to remove grade.");
+                try {
+                    if (studentService.removeGrade(studentId, selectedIndex)) {
+                        gradesListModel.remove(selectedIndex);
+                        updateAverage.run();
+                        refreshStudentTable();
+                        log.info("Grade at index {} removed from student {}", selectedIndex, student.getIndexNumber());
+                    } else {
+                        showError("Failed to remove grade.");
+                    }
+                } catch (IllegalArgumentException ex) {
+                    showError(ex.getMessage());
                 }
             }
         });
@@ -951,11 +879,15 @@ public class StudentManagerSwing extends JFrame {
             );
 
             if (result == JOptionPane.YES_OPTION) {
-                student.clearGrades();
-                gradesListModel.clear();
-                updateAverage.run();
-                refreshStudentTable();
-                log.info("All grades cleared from student {}", student.getIndexNumber());
+                try {
+                    studentService.clearGrades(studentId);
+                    gradesListModel.clear();
+                    updateAverage.run();
+                    refreshStudentTable();
+                    log.info("All grades cleared from student {}", student.getIndexNumber());
+                } catch (IllegalArgumentException ex) {
+                    showError(ex.getMessage());
+                }
             }
         });
 
@@ -993,46 +925,17 @@ public class StudentManagerSwing extends JFrame {
         }
 
         String studentId = (String) studentTableModel.getValueAt(selectedRow, 0);
-        Student student = studentRepo.getById(studentId);
-
-        if (student == null) {
-            showError("Student not found.");
-            return;
-        }
-
-        Group targetGroup = groupRepo.getByName(targetGroupName);
-        if (targetGroup == null) {
-            showError("Target group not found.");
-            return;
-        }
-
-        // Check current group
-        String currentGroupName = GroupRegistry.getGroupName(studentId);
-
-        if (targetGroupName.equals(currentGroupName)) {
-            showInfo("Student is already in group '" + targetGroupName + "'");
-            return;
-        }
 
         try {
-            // Remove from current group if assigned
-            if (currentGroupName != null) {
-                Group currentGroup = groupRepo.getByName(currentGroupName);
-                if (currentGroup != null) {
-                    currentGroup.removeStudent(student);
-                    log.info("Student {} removed from group {}", studentId, currentGroupName);
-                }
-            }
+            // Use service to transfer student (handles all business logic)
+            studentService.transferStudent(studentId, targetGroupName);
 
-            // Add to target group
-            if (targetGroup.addStudent(student)) {
-                setStatus("Student transferred to group '" + targetGroupName + "'");
-                log.info("Student {} transferred to group {}", studentId, targetGroupName);
-                refreshStudentTable();
-            } else {
-                showError("Failed to add student to target group.");
-            }
-
+            setStatus("Student transferred to group '" + targetGroupName + "'");
+            refreshStudentTable();
+        } catch (IllegalArgumentException ex) {
+            showError(ex.getMessage());
+        } catch (IllegalStateException ex) {
+            showInfo(ex.getMessage());
         } catch (Exception ex) {
             showError("Transfer failed: " + ex.getMessage());
             log.error("Error transferring student", ex);
@@ -1055,46 +958,28 @@ public class StudentManagerSwing extends JFrame {
             File file = fileChooser.getSelectedFile();
 
             try {
-                log.info("Loading students from CSV: {}", file.getAbsolutePath());
-                List<Student> students = CsvStudentHandler.loadStudents(
-                    file.toPath(),
-                    config.getDelimiter()
-                );
-
-                int addedToRepo = 0;
-                int addedToGroup = 0;
-
                 // Get currently selected group (if any)
                 String selectedGroupName = groupList.getSelectedValue();
-                Group selectedGroup = null;
-                if (selectedGroupName != null) {
-                    selectedGroup = groupRepo.getByName(selectedGroupName);
-                }
 
-                for (Student student : students) {
-                    // Add to repository
-                    studentRepo.add(student);
-                    addedToRepo++;
-
-                    // If a group is selected, try to add student to it
-                    if (selectedGroup != null) {
-                        if (selectedGroup.addStudent(student)) {
-                            addedToGroup++;
-                        }
-                    }
-                }
+                // Use service to load students (handles all business logic)
+                CsvService.CsvImportResult result = csvService.loadStudents(file.toPath(), selectedGroupName);
 
                 refreshStudentTable();
 
                 // Build informative message
                 StringBuilder message = new StringBuilder();
-                message.append("Imported ").append(students.size()).append(" students from ").append(file.getName());
+                message.append("Imported ").append(result.getItemsAdded()).append(" students from ").append(file.getName());
 
-                if (selectedGroup != null) {
-                    message.append("\n\nAdded ").append(addedToGroup).append(" students to group '")
+                if (result.getItemsSkipped() > 0) {
+                    message.append("\n(Skipped ").append(result.getItemsSkipped()).append(" duplicate(s))");
+                }
+
+                if (selectedGroupName != null) {
+                    message.append("\n\nAdded ").append(result.getItemsAddedToGroup()).append(" students to group '")
                            .append(selectedGroupName).append("'");
-                    if (addedToGroup < students.size()) {
-                        message.append("\n(").append(students.size() - addedToGroup)
+                    int notAdded = result.getItemsAdded() - result.getItemsAddedToGroup();
+                    if (notAdded > 0) {
+                        message.append("\n(").append(notAdded)
                                .append(" students were already assigned to other groups)");
                     }
                 } else {
@@ -1103,12 +988,14 @@ public class StudentManagerSwing extends JFrame {
                 }
 
                 showInfo(message.toString());
-                setStatus("Imported " + students.size() + " students");
-                log.info("Successfully imported {} students ({} added to group)", students.size(), addedToGroup);
+                setStatus("Imported " + result.getItemsAdded() + " students");
 
             } catch (IOException ex) {
                 showError("Failed to load file: " + ex.getMessage());
                 log.error("Error loading students from CSV", ex);
+            } catch (CsvFormatException ex) {
+                showError("CSV format error: " + ex.getMessage());
+                log.error("CSV format error", ex);
             } catch (Exception ex) {
                 showError("Error importing students: " + ex.getMessage());
                 log.error("Error importing students", ex);
@@ -1125,26 +1012,22 @@ public class StudentManagerSwing extends JFrame {
             File file = fileChooser.getSelectedFile();
 
             try {
-                log.info("Loading groups from CSV: {}", file.getAbsolutePath());
-                List<Group> groups = CsvGroupHandler.loadGroups(
-                    file.toPath(),
-                    config.getDelimiter(),
-                    studentRepo
-                );
-
-                for (Group group : groups) {
-                    groupRepo.add(group);
-                }
+                // Use service to load groups (handles all business logic)
+                CsvService.CsvImportResult result = csvService.loadGroups(file.toPath());
 
                 refreshGroupList();
                 refreshStudentTable();
-                showInfo("Imported " + groups.size() + " groups from " + file.getName());
-                setStatus("Imported " + groups.size() + " groups");
-                log.info("Successfully imported {} groups", groups.size());
+
+                String message = result.getMessage() + " from " + file.getName();
+                showInfo(message);
+                setStatus("Imported " + result.getItemsAdded() + " groups");
 
             } catch (IOException ex) {
                 showError("Failed to load file: " + ex.getMessage());
                 log.error("Error loading groups from CSV", ex);
+            } catch (CsvFormatException ex) {
+                showError("CSV format error: " + ex.getMessage());
+                log.error("CSV format error", ex);
             } catch (Exception ex) {
                 showError("Error importing groups: " + ex.getMessage());
                 log.error("Error importing groups", ex);
@@ -1180,16 +1063,11 @@ public class StudentManagerSwing extends JFrame {
             }
 
             try {
-                log.info("Saving students to CSV: {}", file.getAbsolutePath());
-                CsvStudentHandler.saveStudents(
-                    studentRepo.getAll(),
-                    file.toPath(),
-                    config.getDelimiter()
-                );
+                // Use service to save students (handles all business logic)
+                int count = csvService.saveStudents(file.toPath());
 
-                showInfo("Exported " + studentRepo.size() + " students to " + file.getName());
-                setStatus("Exported " + studentRepo.size() + " students");
-                log.info("Successfully exported {} students", studentRepo.size());
+                showInfo("Exported " + count + " students to " + file.getName());
+                setStatus("Exported " + count + " students");
 
             } catch (IOException ex) {
                 showError("Failed to save file: " + ex.getMessage());
@@ -1226,17 +1104,11 @@ public class StudentManagerSwing extends JFrame {
             }
 
             try {
-                log.info("Saving groups to CSV: {}", file.getAbsolutePath());
-                CsvGroupHandler.saveGroups(
-                    groupRepo.getAll(),
-                    file.toPath(),
-                    config.getDelimiter()
-                );
+                // Use service to save groups (handles all business logic)
+                int count = csvService.saveGroups(file.toPath());
 
-                int groupCount = groupRepo.getAll().size();
-                showInfo("Exported " + groupCount + " groups to " + file.getName());
-                setStatus("Exported " + groupCount + " groups");
-                log.info("Successfully exported {} groups", groupCount);
+                showInfo("Exported " + count + " groups to " + file.getName());
+                setStatus("Exported " + count + " groups");
 
             } catch (IOException ex) {
                 showError("Failed to save file: " + ex.getMessage());
