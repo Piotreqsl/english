@@ -81,6 +81,49 @@ public class Student extends Person {
     }
     
     /**
+     * Removes a specific grade at the given index.
+     *
+     * @param index the index of the grade to remove (0-based)
+     * @return true if the grade was removed, false if index is out of bounds
+     */
+    public boolean removeGrade(int index) {
+        if (index < 0 || index >= grades.size()) {
+            log.warn("Attempt to remove grade at invalid index={} for student index={}",
+                index, indexNumber);
+            return false;
+        }
+        double removedGrade = grades.remove(index);
+        log.info("Removed grade={} at position {} from student index={}",
+            removedGrade, index, indexNumber);
+        return true;
+    }
+
+    /**
+     * Removes the first occurrence of the specified grade value.
+     *
+     * @param grade the grade value to remove
+     * @return true if the grade was found and removed, false otherwise
+     */
+    public boolean removeGradeValue(double grade) {
+        boolean removed = grades.remove(Double.valueOf(grade));
+        if (removed) {
+            log.info("Removed grade value={} from student index={}", grade, indexNumber);
+        } else {
+            log.warn("Grade value={} not found for student index={}", grade, indexNumber);
+        }
+        return removed;
+    }
+
+    /**
+     * Clears all grades for this student.
+     */
+    public void clearGrades() {
+        int count = grades.size();
+        grades.clear();
+        log.info("Cleared {} grades from student index={}", count, indexNumber);
+    }
+
+    /**
      * Calculates the average of all grades.
      * 
      * @return OptionalDouble containing the average, or empty if no grades

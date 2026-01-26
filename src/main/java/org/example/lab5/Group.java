@@ -15,7 +15,7 @@ import org.apache.logging.log4j.Logger;
 public class Group {
     private static final Logger log = LogManager.getLogger(Group.class);
     private final String name;
-    private final String description;
+    private String description;  // Changed from final to allow editing
     private final Set<Student> members;
     
     /**
@@ -49,6 +49,16 @@ public class Group {
         return description;
     }
     
+    /**
+     * Sets a new description for the group.
+     *
+     * @param description the new description
+     */
+    public void setDescription(String description) {
+        this.description = description;
+        log.info("Group '{}' description updated to: '{}'", name, description);
+    }
+
     /**
      * Adds a student to the group.
      * The student can only be added if they are not already in another group.

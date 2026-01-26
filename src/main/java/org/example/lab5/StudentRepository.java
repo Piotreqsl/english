@@ -14,6 +14,32 @@ public class StudentRepository {
         students.put(student.getId(), student);
     }
 
+    /**
+     * Updates a student in the repository by ID.
+     * Replaces the existing student with the new one.
+     *
+     * @param id the ID of the student to replace
+     * @param student the new student object
+     * @return true if student was found and updated, false otherwise
+     */
+    public boolean update(String id, Student student) {
+        if (students.containsKey(id)) {
+            students.put(id, student);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Removes a student from the repository by ID.
+     *
+     * @param id the ID of the student to remove
+     * @return the removed student, or null if not found
+     */
+    public Student remove(String id) {
+        return students.remove(id);
+    }
+
     public Student getById(String id) {
         return students.get(id);
     }

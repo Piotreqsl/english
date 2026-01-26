@@ -256,11 +256,20 @@ All required operations are fully implemented:
    - GUI refreshes UI from repositories
 
 3. **Immutable domain objects**
-   - Person and Student are immutable (no setters)
-   - New objects created for changes
-   - Grades can be added (List is mutable)
+   - Person and Student are immutable (no setters for core fields)
+   - New objects created for student editing
+   - Grades can be added/removed (List is mutable)
+   - Group description can be edited (setDescription method added)
 
-4. **Consistent error handling**
+4. **Backend enhancements for GUI**
+   - Group.setDescription(String) - allows editing group description
+   - Student.removeGrade(int) - removes grade at specific index
+   - Student.removeGradeValue(double) - removes first occurrence of grade value
+   - Student.clearGrades() - removes all grades
+   - StudentRepository.remove(String) - removes student by ID
+   - StudentRepository.update(String, Student) - updates student (replaces object)
+
+5. **Consistent error handling**
    - Domain throws exceptions
    - GUI catches and shows user-friendly dialogs
    - All errors logged via Log4j2
@@ -323,13 +332,22 @@ All required operations are fully implemented:
    - Choose target group from dropdown
    - Click "Transfer"
 
-4. **Manage Grades:**
+4. **Edit Student:**
+   - Select student in table
+   - Click "Edit Student" or double-click the row
+   - Modify any field (name, birth date, gender, index)
+   - Click "Save"
+   - Student is recreated with new data, preserving grades
+
+5. **Manage Grades:**
    - Select student
    - Click "View/Edit Grades"
-   - Add grades one by one with validation
+   - Add grades: enter value and click "Add"
+   - Remove grade: select grade in list and click "Remove Selected"
+   - Clear all: click "Clear All" (with confirmation)
    - See live average calculation
 
-5. **Import/Export:**
+6. **Import/Export:**
    - File → Load Students/Groups from CSV
    - File → Save Students/Groups to CSV
    - Choose file location
@@ -362,21 +380,22 @@ All required operations are fully implemented:
 - [ ] Export students to CSV
 - [ ] Export groups to CSV
 - [ ] Search for student
-- [ ] Edit student grades
+- [ ] Edit student data (all fields)
+- [ ] Add student grades
+- [ ] Remove specific student grade
+- [ ] Clear all student grades
 - [ ] View student details (double-click)
+- [ ] Edit group description
 
 ## Known Limitations
 
-1. **Group description editing:**
-   - Group class doesn't have setDescription() method
-   - Would require extending domain model
+1. **Student data immutability pattern:**
+   - Editing a student creates a new object (preserves immutability)
+   - Original student ID is replaced
+   - This is by design (immutable value objects pattern)
+   - Grades and group membership are preserved
 
-2. **Student data immutability:**
-   - Cannot edit name, birth date, etc. after creation
-   - This is by design (immutable value objects)
-   - Only grades can be modified
-
-3. **Undo/Redo:**
+2. **Undo/Redo:**
    - Not implemented in this version
    - Would require command pattern
 

@@ -376,3 +376,394 @@
 2026-01-22 16:24:55 INFO  org.example.lab5.GroupRegistry - Assigned personId=0000003 to group=G2
 2026-01-22 16:24:55 INFO  org.example.lab5.Group - Student index=S12347 added to group='G2'
 2026-01-22 16:24:55 INFO  org.example.lab7.StudentManagerSwing - Student 0000003 transferred to group G2
+2026-01-22 16:29:30 INFO  org.example.lab7.StudentManagerSwing - Starting Student Manager Swing application
+2026-01-22 16:29:31 INFO  org.example.lab7.StudentManagerSwing - Initializing Swing GUI application
+2026-01-22 16:29:31 INFO  org.example.lab5.ConfigManager - Loaded configuration from console.properties
+2026-01-22 16:29:31 INFO  org.example.lab7.StudentManagerSwing - Swing GUI initialized successfully
+2026-01-22 16:32:04 INFO  org.example.lab7.StudentManagerSwing - Loading students from CSV: C:\Users\Admin\Dev\english\students.csv
+2026-01-22 16:32:04 DEBUG org.example.lab5.Person - Created Person id=0000001 name=Anna Kowalska birth=15.03.2003 gender=FEMALE
+2026-01-22 16:32:04 INFO  org.example.lab5.Student - New Student created: index=S12345 personId=0000001
+2026-01-22 16:32:04 DEBUG org.example.lab5.Student - Added grade=5.0 to student index=S12345 (now 1 grades)
+2026-01-22 16:32:04 DEBUG org.example.lab5.Student - Added grade=4.5 to student index=S12345 (now 2 grades)
+2026-01-22 16:32:04 DEBUG org.example.lab5.Student - Added grade=4.5 to student index=S12345 (now 3 grades)
+2026-01-22 16:32:04 DEBUG org.example.lab5.Student - Added grade=5.0 to student index=S12345 (now 4 grades)
+2026-01-22 16:32:04 DEBUG org.example.lab5.Person - Created Person id=0000002 name=Piotr Nowak birth=02.09.2002 gender=MALE
+2026-01-22 16:32:04 INFO  org.example.lab5.Student - New Student created: index=S12346 personId=0000002
+2026-01-22 16:32:04 DEBUG org.example.lab5.Student - Added grade=4.0 to student index=S12346 (now 1 grades)
+2026-01-22 16:32:04 DEBUG org.example.lab5.Student - Added grade=4.0 to student index=S12346 (now 2 grades)
+2026-01-22 16:32:04 DEBUG org.example.lab5.Student - Added grade=3.5 to student index=S12346 (now 3 grades)
+2026-01-22 16:32:04 DEBUG org.example.lab5.Student - Added grade=4.5 to student index=S12346 (now 4 grades)
+2026-01-22 16:32:04 DEBUG org.example.lab5.Person - Created Person id=0000003 name=Julia Mazur birth=01.01.2004 gender=FEMALE
+2026-01-22 16:32:04 INFO  org.example.lab5.Student - New Student created: index=S12347 personId=0000003
+2026-01-22 16:32:04 DEBUG org.example.lab5.Student - Added grade=3.5 to student index=S12347 (now 1 grades)
+2026-01-22 16:32:04 DEBUG org.example.lab5.Student - Added grade=3.0 to student index=S12347 (now 2 grades)
+2026-01-22 16:32:04 DEBUG org.example.lab5.Student - Added grade=4.0 to student index=S12347 (now 3 grades)
+2026-01-22 16:32:04 DEBUG org.example.lab5.Student - Added grade=3.5 to student index=S12347 (now 4 grades)
+2026-01-22 16:32:04 DEBUG org.example.lab5.Person - Created Person id=0000004 name=Jan Wisniewski birth=12.06.2001 gender=MALE
+2026-01-22 16:32:04 INFO  org.example.lab5.Student - New Student created: index=S12348 personId=0000004
+2026-01-22 16:32:04 DEBUG org.example.lab5.Student - Added grade=5.0 to student index=S12348 (now 1 grades)
+2026-01-22 16:32:04 DEBUG org.example.lab5.Student - Added grade=5.0 to student index=S12348 (now 2 grades)
+2026-01-22 16:32:04 DEBUG org.example.lab5.Student - Added grade=4.5 to student index=S12348 (now 3 grades)
+2026-01-22 16:32:04 DEBUG org.example.lab5.Student - Added grade=5.0 to student index=S12348 (now 4 grades)
+2026-01-22 16:32:04 DEBUG org.example.lab5.Person - Created Person id=0000005 name=Maria Wojcik birth=25.11.2003 gender=FEMALE
+2026-01-22 16:32:04 INFO  org.example.lab5.Student - New Student created: index=S12349 personId=0000005
+2026-01-22 16:32:04 DEBUG org.example.lab5.Student - Added grade=4.5 to student index=S12349 (now 1 grades)
+2026-01-22 16:32:04 DEBUG org.example.lab5.Student - Added grade=4.0 to student index=S12349 (now 2 grades)
+2026-01-22 16:32:04 DEBUG org.example.lab5.Student - Added grade=4.5 to student index=S12349 (now 3 grades)
+2026-01-22 16:32:04 DEBUG org.example.lab5.Student - Added grade=4.0 to student index=S12349 (now 4 grades)
+2026-01-22 16:32:04 DEBUG org.example.lab5.Person - Created Person id=0000006 name=Tomasz Kaminski birth=08.04.2002 gender=MALE
+2026-01-22 16:32:04 INFO  org.example.lab5.Student - New Student created: index=S12350 personId=0000006
+2026-01-22 16:32:04 DEBUG org.example.lab5.Student - Added grade=3.0 to student index=S12350 (now 1 grades)
+2026-01-22 16:32:04 DEBUG org.example.lab5.Student - Added grade=3.5 to student index=S12350 (now 2 grades)
+2026-01-22 16:32:04 DEBUG org.example.lab5.Student - Added grade=3.0 to student index=S12350 (now 3 grades)
+2026-01-22 16:32:04 DEBUG org.example.lab5.Student - Added grade=3.5 to student index=S12350 (now 4 grades)
+2026-01-22 16:32:04 DEBUG org.example.lab5.Person - Created Person id=0000007 name=Katarzyna Lewandowska birth=19.08.2004 gender=FEMALE
+2026-01-22 16:32:04 INFO  org.example.lab5.Student - New Student created: index=S12351 personId=0000007
+2026-01-22 16:32:04 DEBUG org.example.lab5.Student - Added grade=4.0 to student index=S12351 (now 1 grades)
+2026-01-22 16:32:04 DEBUG org.example.lab5.Student - Added grade=4.5 to student index=S12351 (now 2 grades)
+2026-01-22 16:32:04 DEBUG org.example.lab5.Student - Added grade=4.0 to student index=S12351 (now 3 grades)
+2026-01-22 16:32:04 DEBUG org.example.lab5.Student - Added grade=4.5 to student index=S12351 (now 4 grades)
+2026-01-22 16:32:04 DEBUG org.example.lab5.Person - Created Person id=0000008 name=Michal Zielinski birth=30.12.2001 gender=MALE
+2026-01-22 16:32:04 INFO  org.example.lab5.Student - New Student created: index=S12352 personId=0000008
+2026-01-22 16:32:04 DEBUG org.example.lab5.Student - Added grade=5.0 to student index=S12352 (now 1 grades)
+2026-01-22 16:32:04 DEBUG org.example.lab5.Student - Added grade=4.5 to student index=S12352 (now 2 grades)
+2026-01-22 16:32:04 DEBUG org.example.lab5.Student - Added grade=5.0 to student index=S12352 (now 3 grades)
+2026-01-22 16:32:04 DEBUG org.example.lab5.Student - Added grade=4.5 to student index=S12352 (now 4 grades)
+2026-01-22 16:32:06 INFO  org.example.lab7.StudentManagerSwing - Successfully imported 8 students (0 added to group)
+2026-01-22 16:32:07 INFO  org.example.lab7.StudentManagerSwing - Displayed all 8 students (8 unassigned)
+2026-01-22 16:32:16 INFO  org.example.lab7.StudentManagerSwing - Loading groups from CSV: C:\Users\Admin\Dev\english\groups.csv
+2026-01-22 16:32:16 INFO  org.example.lab5.Group - Group created: name='G1', description='Java Monday'
+2026-01-22 16:32:16 INFO  org.example.lab5.GroupRegistry - Assigned personId=0000001 to group=G1
+2026-01-22 16:32:16 INFO  org.example.lab5.Group - Student index=S12345 added to group='G1'
+2026-01-22 16:32:16 INFO  org.example.lab5.GroupRegistry - Assigned personId=0000002 to group=G1
+2026-01-22 16:32:16 INFO  org.example.lab5.Group - Student index=S12346 added to group='G1'
+2026-01-22 16:32:16 INFO  org.example.lab5.GroupRegistry - Assigned personId=0000003 to group=G1
+2026-01-22 16:32:16 INFO  org.example.lab5.Group - Student index=S12347 added to group='G1'
+2026-01-22 16:32:16 INFO  org.example.lab5.Group - Group created: name='G2', description='Java Friday'
+2026-01-22 16:32:16 INFO  org.example.lab5.GroupRegistry - Assigned personId=0000004 to group=G2
+2026-01-22 16:32:16 INFO  org.example.lab5.Group - Student index=S12348 added to group='G2'
+2026-01-22 16:32:16 INFO  org.example.lab5.GroupRegistry - Assigned personId=0000005 to group=G2
+2026-01-22 16:32:16 INFO  org.example.lab5.Group - Student index=S12349 added to group='G2'
+2026-01-22 16:32:16 INFO  org.example.lab5.Group - Group created: name='G3', description='Python Basics'
+2026-01-22 16:32:16 INFO  org.example.lab5.GroupRegistry - Assigned personId=0000006 to group=G3
+2026-01-22 16:32:16 INFO  org.example.lab5.Group - Student index=S12350 added to group='G3'
+2026-01-22 16:32:16 INFO  org.example.lab5.GroupRegistry - Assigned personId=0000007 to group=G3
+2026-01-22 16:32:16 INFO  org.example.lab5.Group - Student index=S12351 added to group='G3'
+2026-01-22 16:32:16 INFO  org.example.lab5.GroupRegistry - Assigned personId=0000008 to group=G3
+2026-01-22 16:32:16 INFO  org.example.lab5.Group - Student index=S12352 added to group='G3'
+2026-01-22 16:32:18 INFO  org.example.lab7.StudentManagerSwing - Successfully imported 3 groups
+2026-01-22 16:32:28 DEBUG org.example.lab5.Student - Added grade=2.0 to student index=S12346 (now 5 grades)
+2026-01-22 16:32:34 DEBUG org.example.lab5.GroupRegistry - Unassigned personId=0000003 from registry
+2026-01-22 16:32:34 INFO  org.example.lab5.Group - Student index=S12347 removed from group='G1'
+2026-01-22 16:32:34 INFO  org.example.lab7.StudentManagerSwing - Student 0000003 removed from group G1
+2026-01-22 16:32:34 INFO  org.example.lab5.GroupRegistry - Assigned personId=0000003 to group=G2
+2026-01-22 16:32:34 INFO  org.example.lab5.Group - Student index=S12347 added to group='G2'
+2026-01-22 16:32:34 INFO  org.example.lab7.StudentManagerSwing - Student 0000003 transferred to group G2
+2026-01-22 16:32:45 DEBUG org.example.lab5.GroupRegistry - Unassigned personId=0000006 from registry
+2026-01-22 16:32:45 INFO  org.example.lab5.Group - Student index=S12350 removed from group='G3'
+2026-01-22 16:32:45 INFO  org.example.lab7.StudentManagerSwing - Student 0000006 removed from group G3
+2026-01-22 16:32:45 INFO  org.example.lab5.GroupRegistry - Assigned personId=0000006 to group=G1
+2026-01-22 16:32:45 INFO  org.example.lab5.Group - Student index=S12350 added to group='G1'
+2026-01-22 16:32:45 INFO  org.example.lab7.StudentManagerSwing - Student 0000006 transferred to group G1
+2026-01-22 16:33:06 DEBUG org.example.lab5.Person - Created Person id=0000009 name=test testowy birth=02.11.2002 gender=MALE
+2026-01-22 16:33:06 INFO  org.example.lab5.Student - New Student created: index=333 personId=0000009
+2026-01-22 16:33:06 DEBUG org.example.lab5.Student - Added grade=3.5 to student index=333 (now 1 grades)
+2026-01-22 16:33:06 DEBUG org.example.lab5.Student - Added grade=4.0 to student index=333 (now 2 grades)
+2026-01-22 16:33:06 DEBUG org.example.lab5.Student - Added grade=5.0 to student index=333 (now 3 grades)
+2026-01-22 16:33:06 INFO  org.example.lab5.GroupRegistry - Assigned personId=0000009 to group=G1
+2026-01-22 16:33:06 INFO  org.example.lab5.Group - Student index=333 added to group='G1'
+2026-01-22 16:33:06 INFO  org.example.lab7.StudentManagerSwing - Student added via GUI: test testowy (index: 333)
+2026-01-22 16:33:26 DEBUG org.example.lab5.Person - Created Person id=000000A name=test testowy birth=02.11.2002 gender=MALE
+2026-01-22 16:33:26 INFO  org.example.lab5.Student - New Student created: index=3334 personId=000000A
+2026-01-22 16:33:26 DEBUG org.example.lab5.Student - Added grade=3.5 to student index=3334 (now 1 grades)
+2026-01-22 16:33:26 DEBUG org.example.lab5.Student - Added grade=4.0 to student index=3334 (now 2 grades)
+2026-01-22 16:33:26 DEBUG org.example.lab5.Student - Added grade=5.0 to student index=3334 (now 3 grades)
+2026-01-22 16:33:26 INFO  org.example.lab5.GroupRegistry - Assigned personId=000000A to group=G1
+2026-01-22 16:33:26 INFO  org.example.lab5.Group - Student index=3334 added to group='G1'
+2026-01-22 16:33:26 INFO  org.example.lab7.StudentManagerSwing - Student added via GUI: test testowy (index: 3334)
+2026-01-22 16:33:32 DEBUG org.example.lab5.GroupRegistry - Unassigned personId=000000A from registry
+2026-01-22 16:33:32 INFO  org.example.lab5.Group - Student index=3334 removed from group='G1'
+2026-01-22 16:33:32 INFO  org.example.lab7.StudentManagerSwing - Student removed via GUI: test testowy
+2026-01-22 16:33:34 INFO  org.example.lab7.StudentManagerSwing - Displayed all 9 students (0 unassigned)
+2026-01-22 16:33:58 INFO  org.example.lab7.StudentManagerSwing - Saving students to CSV: C:\Users\Admin\Dev\english\students2.csv
+2026-01-22 16:34:00 INFO  org.example.lab7.StudentManagerSwing - Successfully exported 9 students
+2026-01-26 17:48:14 INFO  org.example.lab7.StudentManagerSwing - Starting Student Manager Swing application
+2026-01-26 17:48:15 INFO  org.example.lab7.StudentManagerSwing - Initializing Swing GUI application
+2026-01-26 17:48:15 INFO  org.example.lab5.ConfigManager - Loaded configuration from console.properties
+2026-01-26 17:48:15 INFO  org.example.lab7.StudentManagerSwing - Swing GUI initialized successfully
+2026-01-26 17:48:34 INFO  org.example.lab7.StudentManagerSwing - Loading students from CSV: C:\Users\Admin\Dev\english\students.csv
+2026-01-26 17:48:34 DEBUG org.example.lab5.Person - Created Person id=0000001 name=Anna Kowalska birth=15.03.2003 gender=FEMALE
+2026-01-26 17:48:34 INFO  org.example.lab5.Student - New Student created: index=S12345 personId=0000001
+2026-01-26 17:48:34 DEBUG org.example.lab5.Student - Added grade=5.0 to student index=S12345 (now 1 grades)
+2026-01-26 17:48:34 DEBUG org.example.lab5.Student - Added grade=4.5 to student index=S12345 (now 2 grades)
+2026-01-26 17:48:34 DEBUG org.example.lab5.Student - Added grade=4.5 to student index=S12345 (now 3 grades)
+2026-01-26 17:48:34 DEBUG org.example.lab5.Student - Added grade=5.0 to student index=S12345 (now 4 grades)
+2026-01-26 17:48:34 DEBUG org.example.lab5.Person - Created Person id=0000002 name=Piotr Nowak birth=02.09.2002 gender=MALE
+2026-01-26 17:48:34 INFO  org.example.lab5.Student - New Student created: index=S12346 personId=0000002
+2026-01-26 17:48:34 DEBUG org.example.lab5.Student - Added grade=4.0 to student index=S12346 (now 1 grades)
+2026-01-26 17:48:34 DEBUG org.example.lab5.Student - Added grade=4.0 to student index=S12346 (now 2 grades)
+2026-01-26 17:48:34 DEBUG org.example.lab5.Student - Added grade=3.5 to student index=S12346 (now 3 grades)
+2026-01-26 17:48:34 DEBUG org.example.lab5.Student - Added grade=4.5 to student index=S12346 (now 4 grades)
+2026-01-26 17:48:34 DEBUG org.example.lab5.Person - Created Person id=0000003 name=Julia Mazur birth=01.01.2004 gender=FEMALE
+2026-01-26 17:48:34 INFO  org.example.lab5.Student - New Student created: index=S12347 personId=0000003
+2026-01-26 17:48:34 DEBUG org.example.lab5.Student - Added grade=3.5 to student index=S12347 (now 1 grades)
+2026-01-26 17:48:34 DEBUG org.example.lab5.Student - Added grade=3.0 to student index=S12347 (now 2 grades)
+2026-01-26 17:48:34 DEBUG org.example.lab5.Student - Added grade=4.0 to student index=S12347 (now 3 grades)
+2026-01-26 17:48:34 DEBUG org.example.lab5.Student - Added grade=3.5 to student index=S12347 (now 4 grades)
+2026-01-26 17:48:34 DEBUG org.example.lab5.Person - Created Person id=0000004 name=Jan Wisniewski birth=12.06.2001 gender=MALE
+2026-01-26 17:48:34 INFO  org.example.lab5.Student - New Student created: index=S12348 personId=0000004
+2026-01-26 17:48:34 DEBUG org.example.lab5.Student - Added grade=5.0 to student index=S12348 (now 1 grades)
+2026-01-26 17:48:34 DEBUG org.example.lab5.Student - Added grade=5.0 to student index=S12348 (now 2 grades)
+2026-01-26 17:48:34 DEBUG org.example.lab5.Student - Added grade=4.5 to student index=S12348 (now 3 grades)
+2026-01-26 17:48:34 DEBUG org.example.lab5.Student - Added grade=5.0 to student index=S12348 (now 4 grades)
+2026-01-26 17:48:34 DEBUG org.example.lab5.Person - Created Person id=0000005 name=Maria Wojcik birth=25.11.2003 gender=FEMALE
+2026-01-26 17:48:34 INFO  org.example.lab5.Student - New Student created: index=S12349 personId=0000005
+2026-01-26 17:48:34 DEBUG org.example.lab5.Student - Added grade=4.5 to student index=S12349 (now 1 grades)
+2026-01-26 17:48:34 DEBUG org.example.lab5.Student - Added grade=4.0 to student index=S12349 (now 2 grades)
+2026-01-26 17:48:34 DEBUG org.example.lab5.Student - Added grade=4.5 to student index=S12349 (now 3 grades)
+2026-01-26 17:48:34 DEBUG org.example.lab5.Student - Added grade=4.0 to student index=S12349 (now 4 grades)
+2026-01-26 17:48:34 DEBUG org.example.lab5.Person - Created Person id=0000006 name=Tomasz Kaminski birth=08.04.2002 gender=MALE
+2026-01-26 17:48:34 INFO  org.example.lab5.Student - New Student created: index=S12350 personId=0000006
+2026-01-26 17:48:34 DEBUG org.example.lab5.Student - Added grade=3.0 to student index=S12350 (now 1 grades)
+2026-01-26 17:48:34 DEBUG org.example.lab5.Student - Added grade=3.5 to student index=S12350 (now 2 grades)
+2026-01-26 17:48:34 DEBUG org.example.lab5.Student - Added grade=3.0 to student index=S12350 (now 3 grades)
+2026-01-26 17:48:34 DEBUG org.example.lab5.Student - Added grade=3.5 to student index=S12350 (now 4 grades)
+2026-01-26 17:48:34 DEBUG org.example.lab5.Person - Created Person id=0000007 name=Katarzyna Lewandowska birth=19.08.2004 gender=FEMALE
+2026-01-26 17:48:34 INFO  org.example.lab5.Student - New Student created: index=S12351 personId=0000007
+2026-01-26 17:48:34 DEBUG org.example.lab5.Student - Added grade=4.0 to student index=S12351 (now 1 grades)
+2026-01-26 17:48:34 DEBUG org.example.lab5.Student - Added grade=4.5 to student index=S12351 (now 2 grades)
+2026-01-26 17:48:34 DEBUG org.example.lab5.Student - Added grade=4.0 to student index=S12351 (now 3 grades)
+2026-01-26 17:48:34 DEBUG org.example.lab5.Student - Added grade=4.5 to student index=S12351 (now 4 grades)
+2026-01-26 17:48:34 DEBUG org.example.lab5.Person - Created Person id=0000008 name=Michal Zielinski birth=30.12.2001 gender=MALE
+2026-01-26 17:48:34 INFO  org.example.lab5.Student - New Student created: index=S12352 personId=0000008
+2026-01-26 17:48:34 DEBUG org.example.lab5.Student - Added grade=5.0 to student index=S12352 (now 1 grades)
+2026-01-26 17:48:34 DEBUG org.example.lab5.Student - Added grade=4.5 to student index=S12352 (now 2 grades)
+2026-01-26 17:48:34 DEBUG org.example.lab5.Student - Added grade=5.0 to student index=S12352 (now 3 grades)
+2026-01-26 17:48:34 DEBUG org.example.lab5.Student - Added grade=4.5 to student index=S12352 (now 4 grades)
+2026-01-26 17:48:38 INFO  org.example.lab7.StudentManagerSwing - Successfully imported 8 students (0 added to group)
+2026-01-26 17:48:42 INFO  org.example.lab7.StudentManagerSwing - Loading groups from CSV: C:\Users\Admin\Dev\english\groups.csv
+2026-01-26 17:48:42 INFO  org.example.lab5.Group - Group created: name='G1', description='Java Monday'
+2026-01-26 17:48:42 INFO  org.example.lab5.GroupRegistry - Assigned personId=0000001 to group=G1
+2026-01-26 17:48:42 INFO  org.example.lab5.Group - Student index=S12345 added to group='G1'
+2026-01-26 17:48:42 INFO  org.example.lab5.GroupRegistry - Assigned personId=0000002 to group=G1
+2026-01-26 17:48:42 INFO  org.example.lab5.Group - Student index=S12346 added to group='G1'
+2026-01-26 17:48:42 INFO  org.example.lab5.GroupRegistry - Assigned personId=0000003 to group=G1
+2026-01-26 17:48:42 INFO  org.example.lab5.Group - Student index=S12347 added to group='G1'
+2026-01-26 17:48:42 INFO  org.example.lab5.Group - Group created: name='G2', description='Java Friday'
+2026-01-26 17:48:42 INFO  org.example.lab5.GroupRegistry - Assigned personId=0000004 to group=G2
+2026-01-26 17:48:42 INFO  org.example.lab5.Group - Student index=S12348 added to group='G2'
+2026-01-26 17:48:42 INFO  org.example.lab5.GroupRegistry - Assigned personId=0000005 to group=G2
+2026-01-26 17:48:42 INFO  org.example.lab5.Group - Student index=S12349 added to group='G2'
+2026-01-26 17:48:42 INFO  org.example.lab5.Group - Group created: name='G3', description='Python Basics'
+2026-01-26 17:48:42 INFO  org.example.lab5.GroupRegistry - Assigned personId=0000006 to group=G3
+2026-01-26 17:48:42 INFO  org.example.lab5.Group - Student index=S12350 added to group='G3'
+2026-01-26 17:48:42 INFO  org.example.lab5.GroupRegistry - Assigned personId=0000007 to group=G3
+2026-01-26 17:48:42 INFO  org.example.lab5.Group - Student index=S12351 added to group='G3'
+2026-01-26 17:48:42 INFO  org.example.lab5.GroupRegistry - Assigned personId=0000008 to group=G3
+2026-01-26 17:48:42 INFO  org.example.lab5.Group - Student index=S12352 added to group='G3'
+2026-01-26 17:48:44 INFO  org.example.lab7.StudentManagerSwing - Successfully imported 3 groups
+2026-01-26 17:48:50 INFO  org.example.lab7.StudentManagerSwing - Displayed all 8 students (0 unassigned)
+2026-01-26 17:50:41 WARN  org.example.lab7.StudentManagerSwing - Invalid birth date format entered
+java.time.format.DateTimeParseException: Text '02333' could not be parsed at index 2
+	at java.time.format.DateTimeFormatter.parseResolved0(DateTimeFormatter.java:2052) ~[?:?]
+	at java.time.format.DateTimeFormatter.parse(DateTimeFormatter.java:1954) ~[?:?]
+	at java.time.LocalDate.parse(LocalDate.java:430) ~[?:?]
+	at org.example.lab5.Person.<init>(Person.java:35) ~[main/:?]
+	at org.example.lab5.Student.<init>(Student.java:40) ~[main/:?]
+	at org.example.lab7.StudentManagerSwing.addNewStudent(StudentManagerSwing.java:583) ~[main/:?]
+	at org.example.lab7.StudentManagerSwing.lambda$createAddStudentForm$16(StudentManagerSwing.java:326) ~[main/:?]
+	at javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1972) ~[?:?]
+	at javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2313) ~[?:?]
+	at javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:405) ~[?:?]
+	at javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262) ~[?:?]
+	at javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:279) ~[?:?]
+	at java.awt.Component.processMouseEvent(Component.java:6626) ~[?:?]
+	at javax.swing.JComponent.processMouseEvent(JComponent.java:3389) ~[?:?]
+	at java.awt.Component.processEvent(Component.java:6391) ~[?:?]
+	at java.awt.Container.processEvent(Container.java:2266) ~[?:?]
+	at java.awt.Component.dispatchEventImpl(Component.java:5001) ~[?:?]
+	at java.awt.Container.dispatchEventImpl(Container.java:2324) ~[?:?]
+	at java.awt.Component.dispatchEvent(Component.java:4833) ~[?:?]
+	at java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4948) ~[?:?]
+	at java.awt.LightweightDispatcher.processMouseEvent(Container.java:4575) ~[?:?]
+	at java.awt.LightweightDispatcher.dispatchEvent(Container.java:4516) ~[?:?]
+	at java.awt.Container.dispatchEventImpl(Container.java:2310) ~[?:?]
+	at java.awt.Window.dispatchEventImpl(Window.java:2780) ~[?:?]
+	at java.awt.Component.dispatchEvent(Component.java:4833) ~[?:?]
+	at java.awt.EventQueue.dispatchEventImpl(EventQueue.java:773) ~[?:?]
+	at java.awt.EventQueue$4.run(EventQueue.java:722) ~[?:?]
+	at java.awt.EventQueue$4.run(EventQueue.java:716) ~[?:?]
+	at java.security.AccessController.doPrivileged(AccessController.java:399) [?:?]
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:86) ~[?:?]
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:97) ~[?:?]
+	at java.awt.EventQueue$5.run(EventQueue.java:746) ~[?:?]
+	at java.awt.EventQueue$5.run(EventQueue.java:744) ~[?:?]
+	at java.security.AccessController.doPrivileged(AccessController.java:399) [?:?]
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:86) [?:?]
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:743) [?:?]
+	at java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203) [?:?]
+	at java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124) [?:?]
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113) [?:?]
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109) [?:?]
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101) [?:?]
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:90) [?:?]
+2026-01-26 17:50:48 WARN  org.example.lab7.StudentManagerSwing - Invalid birth date format entered
+java.time.format.DateTimeParseException: Text '02.11.200' could not be parsed at index 6
+	at java.time.format.DateTimeFormatter.parseResolved0(DateTimeFormatter.java:2052) ~[?:?]
+	at java.time.format.DateTimeFormatter.parse(DateTimeFormatter.java:1954) ~[?:?]
+	at java.time.LocalDate.parse(LocalDate.java:430) ~[?:?]
+	at org.example.lab5.Person.<init>(Person.java:35) ~[main/:?]
+	at org.example.lab5.Student.<init>(Student.java:40) ~[main/:?]
+	at org.example.lab7.StudentManagerSwing.addNewStudent(StudentManagerSwing.java:583) ~[main/:?]
+	at org.example.lab7.StudentManagerSwing.lambda$createAddStudentForm$16(StudentManagerSwing.java:326) ~[main/:?]
+	at javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1972) ~[?:?]
+	at javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2313) ~[?:?]
+	at javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:405) ~[?:?]
+	at javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262) ~[?:?]
+	at javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:279) ~[?:?]
+	at java.awt.Component.processMouseEvent(Component.java:6626) ~[?:?]
+	at javax.swing.JComponent.processMouseEvent(JComponent.java:3389) ~[?:?]
+	at java.awt.Component.processEvent(Component.java:6391) ~[?:?]
+	at java.awt.Container.processEvent(Container.java:2266) ~[?:?]
+	at java.awt.Component.dispatchEventImpl(Component.java:5001) ~[?:?]
+	at java.awt.Container.dispatchEventImpl(Container.java:2324) ~[?:?]
+	at java.awt.Component.dispatchEvent(Component.java:4833) ~[?:?]
+	at java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4948) ~[?:?]
+	at java.awt.LightweightDispatcher.processMouseEvent(Container.java:4575) ~[?:?]
+	at java.awt.LightweightDispatcher.dispatchEvent(Container.java:4516) ~[?:?]
+	at java.awt.Container.dispatchEventImpl(Container.java:2310) ~[?:?]
+	at java.awt.Window.dispatchEventImpl(Window.java:2780) ~[?:?]
+	at java.awt.Component.dispatchEvent(Component.java:4833) ~[?:?]
+	at java.awt.EventQueue.dispatchEventImpl(EventQueue.java:773) ~[?:?]
+	at java.awt.EventQueue$4.run(EventQueue.java:722) ~[?:?]
+	at java.awt.EventQueue$4.run(EventQueue.java:716) ~[?:?]
+	at java.security.AccessController.doPrivileged(AccessController.java:399) [?:?]
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:86) ~[?:?]
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:97) ~[?:?]
+	at java.awt.EventQueue$5.run(EventQueue.java:746) ~[?:?]
+	at java.awt.EventQueue$5.run(EventQueue.java:744) ~[?:?]
+	at java.security.AccessController.doPrivileged(AccessController.java:399) [?:?]
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:86) [?:?]
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:743) [?:?]
+	at java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203) [?:?]
+	at java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124) [?:?]
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113) [?:?]
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109) [?:?]
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101) [?:?]
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:90) [?:?]
+2026-01-26 17:50:49 DEBUG org.example.lab5.Person - Created Person id=0000009 name=ADAM TEST birth=02.11.2002 gender=MALE
+2026-01-26 17:50:49 INFO  org.example.lab5.Student - New Student created: index=411392 personId=0000009
+2026-01-26 17:50:49 DEBUG org.example.lab5.Student - Added grade=5.0 to student index=411392 (now 1 grades)
+2026-01-26 17:50:49 DEBUG org.example.lab5.Student - Added grade=2.0 to student index=411392 (now 2 grades)
+2026-01-26 17:50:49 INFO  org.example.lab5.GroupRegistry - Assigned personId=0000009 to group=G3
+2026-01-26 17:50:49 INFO  org.example.lab5.Group - Student index=411392 added to group='G3'
+2026-01-26 17:50:49 INFO  org.example.lab7.StudentManagerSwing - Student added via GUI: ADAM TEST (index: 411392)
+2026-01-26 17:54:59 INFO  org.example.lab7.StudentManagerSwing - Starting Student Manager Swing application
+2026-01-26 17:54:59 INFO  org.example.lab7.StudentManagerSwing - Initializing Swing GUI application
+2026-01-26 17:54:59 INFO  org.example.lab5.ConfigManager - Loaded configuration from console.properties
+2026-01-26 17:54:59 INFO  org.example.lab7.StudentManagerSwing - Swing GUI initialized successfully
+2026-01-26 17:55:06 INFO  org.example.lab7.StudentManagerSwing - Loading students from CSV: C:\Users\Admin\Dev\english\students.csv
+2026-01-26 17:55:06 DEBUG org.example.lab5.Person - Created Person id=0000001 name=Anna Kowalska birth=15.03.2003 gender=FEMALE
+2026-01-26 17:55:06 INFO  org.example.lab5.Student - New Student created: index=S12345 personId=0000001
+2026-01-26 17:55:06 DEBUG org.example.lab5.Student - Added grade=5.0 to student index=S12345 (now 1 grades)
+2026-01-26 17:55:06 DEBUG org.example.lab5.Student - Added grade=4.5 to student index=S12345 (now 2 grades)
+2026-01-26 17:55:06 DEBUG org.example.lab5.Student - Added grade=4.5 to student index=S12345 (now 3 grades)
+2026-01-26 17:55:06 DEBUG org.example.lab5.Student - Added grade=5.0 to student index=S12345 (now 4 grades)
+2026-01-26 17:55:06 DEBUG org.example.lab5.Person - Created Person id=0000002 name=Piotr Nowak birth=02.09.2002 gender=MALE
+2026-01-26 17:55:06 INFO  org.example.lab5.Student - New Student created: index=S12346 personId=0000002
+2026-01-26 17:55:06 DEBUG org.example.lab5.Student - Added grade=4.0 to student index=S12346 (now 1 grades)
+2026-01-26 17:55:06 DEBUG org.example.lab5.Student - Added grade=4.0 to student index=S12346 (now 2 grades)
+2026-01-26 17:55:06 DEBUG org.example.lab5.Student - Added grade=3.5 to student index=S12346 (now 3 grades)
+2026-01-26 17:55:06 DEBUG org.example.lab5.Student - Added grade=4.5 to student index=S12346 (now 4 grades)
+2026-01-26 17:55:06 DEBUG org.example.lab5.Person - Created Person id=0000003 name=Julia Mazur birth=01.01.2004 gender=FEMALE
+2026-01-26 17:55:06 INFO  org.example.lab5.Student - New Student created: index=S12347 personId=0000003
+2026-01-26 17:55:06 DEBUG org.example.lab5.Student - Added grade=3.5 to student index=S12347 (now 1 grades)
+2026-01-26 17:55:06 DEBUG org.example.lab5.Student - Added grade=3.0 to student index=S12347 (now 2 grades)
+2026-01-26 17:55:06 DEBUG org.example.lab5.Student - Added grade=4.0 to student index=S12347 (now 3 grades)
+2026-01-26 17:55:06 DEBUG org.example.lab5.Student - Added grade=3.5 to student index=S12347 (now 4 grades)
+2026-01-26 17:55:06 DEBUG org.example.lab5.Person - Created Person id=0000004 name=Jan Wisniewski birth=12.06.2001 gender=MALE
+2026-01-26 17:55:06 INFO  org.example.lab5.Student - New Student created: index=S12348 personId=0000004
+2026-01-26 17:55:06 DEBUG org.example.lab5.Student - Added grade=5.0 to student index=S12348 (now 1 grades)
+2026-01-26 17:55:06 DEBUG org.example.lab5.Student - Added grade=5.0 to student index=S12348 (now 2 grades)
+2026-01-26 17:55:06 DEBUG org.example.lab5.Student - Added grade=4.5 to student index=S12348 (now 3 grades)
+2026-01-26 17:55:06 DEBUG org.example.lab5.Student - Added grade=5.0 to student index=S12348 (now 4 grades)
+2026-01-26 17:55:06 DEBUG org.example.lab5.Person - Created Person id=0000005 name=Maria Wojcik birth=25.11.2003 gender=FEMALE
+2026-01-26 17:55:06 INFO  org.example.lab5.Student - New Student created: index=S12349 personId=0000005
+2026-01-26 17:55:06 DEBUG org.example.lab5.Student - Added grade=4.5 to student index=S12349 (now 1 grades)
+2026-01-26 17:55:06 DEBUG org.example.lab5.Student - Added grade=4.0 to student index=S12349 (now 2 grades)
+2026-01-26 17:55:06 DEBUG org.example.lab5.Student - Added grade=4.5 to student index=S12349 (now 3 grades)
+2026-01-26 17:55:06 DEBUG org.example.lab5.Student - Added grade=4.0 to student index=S12349 (now 4 grades)
+2026-01-26 17:55:06 DEBUG org.example.lab5.Person - Created Person id=0000006 name=Tomasz Kaminski birth=08.04.2002 gender=MALE
+2026-01-26 17:55:06 INFO  org.example.lab5.Student - New Student created: index=S12350 personId=0000006
+2026-01-26 17:55:06 DEBUG org.example.lab5.Student - Added grade=3.0 to student index=S12350 (now 1 grades)
+2026-01-26 17:55:06 DEBUG org.example.lab5.Student - Added grade=3.5 to student index=S12350 (now 2 grades)
+2026-01-26 17:55:06 DEBUG org.example.lab5.Student - Added grade=3.0 to student index=S12350 (now 3 grades)
+2026-01-26 17:55:06 DEBUG org.example.lab5.Student - Added grade=3.5 to student index=S12350 (now 4 grades)
+2026-01-26 17:55:06 DEBUG org.example.lab5.Person - Created Person id=0000007 name=Katarzyna Lewandowska birth=19.08.2004 gender=FEMALE
+2026-01-26 17:55:06 INFO  org.example.lab5.Student - New Student created: index=S12351 personId=0000007
+2026-01-26 17:55:06 DEBUG org.example.lab5.Student - Added grade=4.0 to student index=S12351 (now 1 grades)
+2026-01-26 17:55:06 DEBUG org.example.lab5.Student - Added grade=4.5 to student index=S12351 (now 2 grades)
+2026-01-26 17:55:06 DEBUG org.example.lab5.Student - Added grade=4.0 to student index=S12351 (now 3 grades)
+2026-01-26 17:55:06 DEBUG org.example.lab5.Student - Added grade=4.5 to student index=S12351 (now 4 grades)
+2026-01-26 17:55:06 DEBUG org.example.lab5.Person - Created Person id=0000008 name=Michal Zielinski birth=30.12.2001 gender=MALE
+2026-01-26 17:55:06 INFO  org.example.lab5.Student - New Student created: index=S12352 personId=0000008
+2026-01-26 17:55:06 DEBUG org.example.lab5.Student - Added grade=5.0 to student index=S12352 (now 1 grades)
+2026-01-26 17:55:06 DEBUG org.example.lab5.Student - Added grade=4.5 to student index=S12352 (now 2 grades)
+2026-01-26 17:55:06 DEBUG org.example.lab5.Student - Added grade=5.0 to student index=S12352 (now 3 grades)
+2026-01-26 17:55:06 DEBUG org.example.lab5.Student - Added grade=4.5 to student index=S12352 (now 4 grades)
+2026-01-26 17:55:07 INFO  org.example.lab7.StudentManagerSwing - Successfully imported 8 students (0 added to group)
+2026-01-26 17:55:14 INFO  org.example.lab7.StudentManagerSwing - Loading groups from CSV: C:\Users\Admin\Dev\english\groups.csv
+2026-01-26 17:55:14 INFO  org.example.lab5.Group - Group created: name='G1', description='Java Monday'
+2026-01-26 17:55:14 INFO  org.example.lab5.GroupRegistry - Assigned personId=0000001 to group=G1
+2026-01-26 17:55:14 INFO  org.example.lab5.Group - Student index=S12345 added to group='G1'
+2026-01-26 17:55:14 INFO  org.example.lab5.GroupRegistry - Assigned personId=0000002 to group=G1
+2026-01-26 17:55:14 INFO  org.example.lab5.Group - Student index=S12346 added to group='G1'
+2026-01-26 17:55:14 INFO  org.example.lab5.GroupRegistry - Assigned personId=0000003 to group=G1
+2026-01-26 17:55:14 INFO  org.example.lab5.Group - Student index=S12347 added to group='G1'
+2026-01-26 17:55:14 INFO  org.example.lab5.Group - Group created: name='G2', description='Java Friday'
+2026-01-26 17:55:14 INFO  org.example.lab5.GroupRegistry - Assigned personId=0000004 to group=G2
+2026-01-26 17:55:14 INFO  org.example.lab5.Group - Student index=S12348 added to group='G2'
+2026-01-26 17:55:14 INFO  org.example.lab5.GroupRegistry - Assigned personId=0000005 to group=G2
+2026-01-26 17:55:14 INFO  org.example.lab5.Group - Student index=S12349 added to group='G2'
+2026-01-26 17:55:14 INFO  org.example.lab5.Group - Group created: name='G3', description='Python Basics'
+2026-01-26 17:55:14 INFO  org.example.lab5.GroupRegistry - Assigned personId=0000006 to group=G3
+2026-01-26 17:55:14 INFO  org.example.lab5.Group - Student index=S12350 added to group='G3'
+2026-01-26 17:55:14 INFO  org.example.lab5.GroupRegistry - Assigned personId=0000007 to group=G3
+2026-01-26 17:55:14 INFO  org.example.lab5.Group - Student index=S12351 added to group='G3'
+2026-01-26 17:55:14 INFO  org.example.lab5.GroupRegistry - Assigned personId=0000008 to group=G3
+2026-01-26 17:55:14 INFO  org.example.lab5.Group - Student index=S12352 added to group='G3'
+2026-01-26 17:55:15 INFO  org.example.lab7.StudentManagerSwing - Successfully imported 3 groups
+2026-01-26 17:55:35 DEBUG org.example.lab5.GroupRegistry - Unassigned personId=0000002 from registry
+2026-01-26 17:55:35 INFO  org.example.lab5.Group - Student index=S12346 removed from group='G1'
+2026-01-26 17:55:35 DEBUG org.example.lab5.Person - Created Person id=0000009 name=PiotrAS Nowak birth=02.09.2002 gender=MALE
+2026-01-26 17:55:35 INFO  org.example.lab5.Student - New Student created: index=S12346 personId=0000009
+2026-01-26 17:55:35 DEBUG org.example.lab5.Student - Added grade=4.0 to student index=S12346 (now 1 grades)
+2026-01-26 17:55:35 DEBUG org.example.lab5.Student - Added grade=4.0 to student index=S12346 (now 2 grades)
+2026-01-26 17:55:35 DEBUG org.example.lab5.Student - Added grade=3.5 to student index=S12346 (now 3 grades)
+2026-01-26 17:55:35 DEBUG org.example.lab5.Student - Added grade=4.5 to student index=S12346 (now 4 grades)
+2026-01-26 17:55:35 INFO  org.example.lab5.GroupRegistry - Assigned personId=0000009 to group=G1
+2026-01-26 17:55:35 INFO  org.example.lab5.Group - Student index=S12346 added to group='G1'
+2026-01-26 17:55:35 INFO  org.example.lab7.StudentManagerSwing - Student updated: old index=S12346, new index=S12346
+2026-01-26 17:55:55 INFO  org.example.lab5.Student - Removed grade=3.5 at position 2 from student index=S12346
+2026-01-26 17:55:55 INFO  org.example.lab7.StudentManagerSwing - Grade at index 2 removed from student S12346
+2026-01-26 17:56:06 DEBUG org.example.lab5.Student - Added grade=2.0 to student index=S12346 (now 4 grades)
+2026-01-26 17:56:06 INFO  org.example.lab7.StudentManagerSwing - Grade 2.0 added to student S12346
+2026-01-26 17:56:14 DEBUG org.example.lab5.GroupRegistry - Unassigned personId=0000009 from registry
+2026-01-26 17:56:14 INFO  org.example.lab5.Group - Student index=S12346 removed from group='G1'
+2026-01-26 17:56:14 INFO  org.example.lab7.StudentManagerSwing - Student 0000009 removed from group G1
+2026-01-26 17:56:14 INFO  org.example.lab5.GroupRegistry - Assigned personId=0000009 to group=G2
+2026-01-26 17:56:14 INFO  org.example.lab5.Group - Student index=S12346 added to group='G2'
+2026-01-26 17:56:14 INFO  org.example.lab7.StudentManagerSwing - Student 0000009 transferred to group G2
+2026-01-26 17:56:37 INFO  org.example.lab5.Group - Group 'G2' description updated to: 'Java FridayXD'
+2026-01-26 17:56:37 INFO  org.example.lab7.StudentManagerSwing - Description updated for group: G2
+2026-01-26 17:56:43 INFO  org.example.lab7.StudentManagerSwing - Displayed all 8 students (0 unassigned)
+2026-01-26 17:57:00 INFO  org.example.lab7.StudentManagerSwing - Displayed all 8 students (0 unassigned)
+2026-01-26 17:57:07 DEBUG org.example.lab5.GroupRegistry - Unassigned personId=0000006 from registry
+2026-01-26 17:57:07 INFO  org.example.lab5.Group - Student index=S12350 removed from group='G3'
+2026-01-26 17:57:07 DEBUG org.example.lab5.GroupRegistry - Unassigned personId=0000008 from registry
+2026-01-26 17:57:07 INFO  org.example.lab5.Group - Student index=S12352 removed from group='G3'
+2026-01-26 17:57:07 DEBUG org.example.lab5.GroupRegistry - Unassigned personId=0000007 from registry
+2026-01-26 17:57:07 INFO  org.example.lab5.Group - Student index=S12351 removed from group='G3'
+2026-01-26 17:57:07 INFO  org.example.lab7.StudentManagerSwing - Group removed via GUI: G3
+2026-01-26 17:57:10 INFO  org.example.lab7.StudentManagerSwing - Displayed all 8 students (3 unassigned)
+2026-01-26 17:57:15 INFO  org.example.lab7.StudentManagerSwing - Displayed all 8 students (3 unassigned)

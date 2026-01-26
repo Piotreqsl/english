@@ -67,12 +67,11 @@ public class StudentManagerSwing extends JFrame {
     }
 
     private void initializeUI() {
-        // Main container with border layout
-        JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
-        mainPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
-
         // Menu bar
         setJMenuBar(createMenuBar());
+
+        // Main container with border layout
+        JPanel mainPanel = new JPanel(new BorderLayout());
 
         // Left panel: Groups list
         JPanel leftPanel = createGroupsPanel();
@@ -80,16 +79,22 @@ public class StudentManagerSwing extends JFrame {
         // Center panel: Students table
         JPanel centerPanel = createStudentsPanel();
 
-        // Right panel: Forms and actions
+        // Right panel: Forms and actions (with CardLayout)
         JPanel rightPanel = createActionsPanel();
+
+        // Use JSplitPane for better layout (as recommended in guidelines)
+        JSplitPane leftCenterSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, centerPanel);
+        leftCenterSplit.setDividerLocation(260);
+        leftCenterSplit.setResizeWeight(0.2);
+
+        JSplitPane mainSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftCenterSplit, rightPanel);
+        mainSplit.setDividerLocation(820);
+        mainSplit.setResizeWeight(0.7);
+
+        mainPanel.add(mainSplit, BorderLayout.CENTER);
 
         // Bottom: Status bar
         JPanel statusPanel = createStatusPanel();
-
-        // Add to main panel
-        mainPanel.add(leftPanel, BorderLayout.WEST);
-        mainPanel.add(centerPanel, BorderLayout.CENTER);
-        mainPanel.add(rightPanel, BorderLayout.EAST);
         mainPanel.add(statusPanel, BorderLayout.SOUTH);
 
         add(mainPanel);
@@ -490,13 +495,18 @@ public class StudentManagerSwing extends JFrame {
             return; // User cancelled
         }
 
-        // Note: Group class doesn't have setDescription, so we need to recreate it
-        // For now, we'll show a limitation message
-        // In real implementation, you'd add a setDescription method to Group class
+        try {
+            // Update the description using the setter
+            group.setDescription(newDescription.trim());
+            setStatus("Group description updated");
+            log.info("Description updated for group: {}", selectedGroupName);
 
-        showInfo("Note: Group description editing requires extending the Group class.\n" +
-                 "For this demo, you can remove and recreate the group.");
-        log.info("Description edit requested for group: {}", selectedGroupName);
+            // Optionally refresh the group list to reflect changes if displayed
+            refreshGroupList();
+        } catch (Exception ex) {
+            showError("Failed to update description: " + ex.getMessage());
+            log.error("Error updating group description", ex);
+        }
     }
 
     private void removeGroup() {
@@ -641,46 +651,137 @@ public class StudentManagerSwing extends JFrame {
         // Create edit dialog
         JDialog dialog = new JDialog(this, "Edit Student", true);
         dialog.setLayout(new BorderLayout(10, 10));
-        dialog.setSize(400, 300);
+        dialog.setSize(450, 400);
         dialog.setLocationRelativeTo(this);
 
         JPanel formPanel = new JPanel(new GridBagLayout());
+        formPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Note: Person/Student are immutable, so we can only edit grades
+        // First Name
         gbc.gridx = 0; gbc.gridy = 0;
-        formPanel.add(new JLabel("Name:"), gbc);
+        formPanel.add(new JLabel("First Name:"), gbc);
         gbc.gridx = 1;
-        formPanel.add(new JLabel(student.getFirstName() + " " + student.getLastName()), gbc);
+        JTextField firstNameEdit = new JTextField(student.getFirstName(), 20);
+        formPanel.add(firstNameEdit, gbc);
 
+        // Last Name
         gbc.gridx = 0; gbc.gridy = 1;
-        formPanel.add(new JLabel("Index:"), gbc);
+        formPanel.add(new JLabel("Last Name:"), gbc);
         gbc.gridx = 1;
-        formPanel.add(new JLabel(student.getIndexNumber()), gbc);
+        JTextField lastNameEdit = new JTextField(student.getLastName(), 20);
+        formPanel.add(lastNameEdit, gbc);
 
+        // Birth Date
         gbc.gridx = 0; gbc.gridy = 2;
         formPanel.add(new JLabel("Birth Date:"), gbc);
         gbc.gridx = 1;
-        formPanel.add(new JLabel(student.getBirthDateString()), gbc);
+        JTextField birthDateEdit = new JTextField(student.getBirthDateString(), 20);
+        formPanel.add(birthDateEdit, gbc);
 
+        // Gender
         gbc.gridx = 0; gbc.gridy = 3;
         formPanel.add(new JLabel("Gender:"), gbc);
         gbc.gridx = 1;
-        formPanel.add(new JLabel(student.getGender().toString()), gbc);
+        JComboBox<Gender> genderEdit = new JComboBox<>(Gender.values());
+        genderEdit.setSelectedItem(student.getGender());
+        formPanel.add(genderEdit, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 4; gbc.gridwidth = 2;
-        formPanel.add(new JLabel("Student data is immutable. Use 'View/Edit Grades' to modify grades."), gbc);
+        // Index Number
+        gbc.gridx = 0; gbc.gridy = 4;
+        formPanel.add(new JLabel("Index Number:"), gbc);
+        gbc.gridx = 1;
+        JTextField indexEdit = new JTextField(student.getIndexNumber(), 20);
+        formPanel.add(indexEdit, gbc);
+
+        // Info label
+        gbc.gridx = 0; gbc.gridy = 5; gbc.gridwidth = 2;
+        JLabel infoLabel = new JLabel("<html><i>Note: Editing creates a new student with the same grades.<br>Use 'View/Edit Grades' to modify grades.</i></html>");
+        infoLabel.setFont(infoLabel.getFont().deriveFont(10f));
+        formPanel.add(infoLabel, gbc);
 
         dialog.add(formPanel, BorderLayout.CENTER);
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JButton closeButton = new JButton("Close");
-        closeButton.addActionListener(e -> dialog.dispose());
-        buttonPanel.add(closeButton);
+        JButton saveButton = new JButton("Save");
+        JButton cancelButton = new JButton("Cancel");
 
+        saveButton.addActionListener(e -> {
+            try {
+                String newFirstName = firstNameEdit.getText().trim();
+                String newLastName = lastNameEdit.getText().trim();
+                String newBirthDate = birthDateEdit.getText().trim();
+                Gender newGender = (Gender) genderEdit.getSelectedItem();
+                String newIndex = indexEdit.getText().trim();
+
+                // Validation
+                if (newFirstName.isEmpty() || newLastName.isEmpty() || newBirthDate.isEmpty() || newIndex.isEmpty()) {
+                    showError("All fields are required.");
+                    return;
+                }
+
+                // Check if index number changed and is already taken
+                if (!newIndex.equals(student.getIndexNumber())) {
+                    for (Student s : studentRepo.getAll()) {
+                        if (s.getIndexNumber().equals(newIndex) && !s.getId().equals(studentId)) {
+                            showError("Index number already exists: " + newIndex);
+                            return;
+                        }
+                    }
+                }
+
+                // Get current group membership
+                String groupName = GroupRegistry.getGroupName(studentId);
+                Group currentGroup = null;
+                if (groupName != null) {
+                    currentGroup = groupRepo.getByName(groupName);
+                }
+
+                // Remove old student from group
+                if (currentGroup != null) {
+                    currentGroup.removeStudent(student);
+                }
+
+                // Create new student with updated data
+                Student updatedStudent = new Student(newFirstName, newLastName, newBirthDate, newGender, newIndex);
+
+                // Copy grades from old student
+                for (Double grade : student.getGrades()) {
+                    updatedStudent.addGrade(grade);
+                }
+
+                // Remove old student from repository
+                studentRepo.remove(studentId);
+
+                // Add updated student to repository
+                studentRepo.add(updatedStudent);
+
+                // Re-add to group with new student object
+                if (currentGroup != null) {
+                    currentGroup.addStudent(updatedStudent);
+                }
+
+                refreshStudentTable();
+                setStatus("Student updated successfully");
+                log.info("Student updated: old index={}, new index={}", student.getIndexNumber(), newIndex);
+                dialog.dispose();
+
+            } catch (DateTimeParseException ex) {
+                showError("Invalid birth date format. Use DD.MM.YYYY (e.g., 15.03.2000)");
+            } catch (Exception ex) {
+                showError("Failed to update student: " + ex.getMessage());
+                log.error("Error updating student", ex);
+            }
+        });
+
+        cancelButton.addActionListener(e -> dialog.dispose());
+
+        buttonPanel.add(saveButton);
+        buttonPanel.add(cancelButton);
         dialog.add(buttonPanel, BorderLayout.SOUTH);
+
         dialog.setVisible(true);
     }
 
@@ -756,6 +857,7 @@ public class StudentManagerSwing extends JFrame {
         }
 
         JList<String> gradesList = new JList<>(gradesListModel);
+        gradesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane scrollPane = new JScrollPane(gradesList);
         scrollPane.setBorder(new TitledBorder("Current Grades"));
 
@@ -764,13 +866,32 @@ public class StudentManagerSwing extends JFrame {
         addPanel.setBorder(new TitledBorder("Add Grade"));
         JTextField newGradeField = new JTextField(10);
         JButton addGradeButton = new JButton("Add");
+
+        // Average panel
+        JPanel avgPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel avgLabel = new JLabel();
+
+        // Helper method to update average label
+        Runnable updateAverage = () -> {
+            if (student.average().isPresent()) {
+                avgLabel.setText(String.format("Average: %.2f", student.average().getAsDouble()));
+            } else {
+                avgLabel.setText("Average: N/A");
+            }
+        };
+
+        updateAverage.run(); // Initial update
+        avgPanel.add(avgLabel);
+
         addGradeButton.addActionListener(e -> {
             try {
                 double grade = Double.parseDouble(newGradeField.getText().trim());
                 student.addGrade(grade);
                 gradesListModel.addElement(String.format("%.1f", grade));
                 newGradeField.setText("");
+                updateAverage.run();
                 refreshStudentTable();
+                log.info("Grade {} added to student {}", grade, student.getIndexNumber());
             } catch (NumberFormatException ex) {
                 showError("Invalid grade format.");
             } catch (IllegalArgumentException ex) {
@@ -783,27 +904,67 @@ public class StudentManagerSwing extends JFrame {
         addPanel.add(addGradeButton);
         addPanel.add(new JLabel("(Valid: 2.0, 3.0, 3.5, 4.0, 4.5, 5.0)"));
 
-        // Average panel
-        JPanel avgPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JLabel avgLabel = new JLabel();
-        if (student.average().isPresent()) {
-            avgLabel.setText(String.format("Average: %.2f", student.average().getAsDouble()));
-        } else {
-            avgLabel.setText("Average: N/A");
-        }
-        avgPanel.add(avgLabel);
+        // Remove grade panel
+        JPanel removePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        removePanel.setBorder(new TitledBorder("Remove Selected Grade"));
+        JButton removeGradeButton = new JButton("Remove Selected");
+        JButton clearAllGradesButton = new JButton("Clear All");
 
-        // Update average when grades change
-        addGradeButton.addActionListener(e -> {
-            if (student.average().isPresent()) {
-                avgLabel.setText(String.format("Average: %.2f", student.average().getAsDouble()));
-            } else {
-                avgLabel.setText("Average: N/A");
+        removeGradeButton.addActionListener(e -> {
+            int selectedIndex = gradesList.getSelectedIndex();
+            if (selectedIndex == -1) {
+                showWarning("Please select a grade to remove.");
+                return;
+            }
+
+            int result = JOptionPane.showConfirmDialog(
+                dialog,
+                "Remove grade " + gradesListModel.getElementAt(selectedIndex) + "?",
+                "Confirm Remove",
+                JOptionPane.YES_NO_OPTION
+            );
+
+            if (result == JOptionPane.YES_OPTION) {
+                if (student.removeGrade(selectedIndex)) {
+                    gradesListModel.remove(selectedIndex);
+                    updateAverage.run();
+                    refreshStudentTable();
+                    log.info("Grade at index {} removed from student {}", selectedIndex, student.getIndexNumber());
+                } else {
+                    showError("Failed to remove grade.");
+                }
             }
         });
 
+        clearAllGradesButton.addActionListener(e -> {
+            if (gradesListModel.isEmpty()) {
+                showWarning("No grades to clear.");
+                return;
+            }
+
+            int result = JOptionPane.showConfirmDialog(
+                dialog,
+                "Clear all " + gradesListModel.getSize() + " grades?",
+                "Confirm Clear All",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
+            );
+
+            if (result == JOptionPane.YES_OPTION) {
+                student.clearGrades();
+                gradesListModel.clear();
+                updateAverage.run();
+                refreshStudentTable();
+                log.info("All grades cleared from student {}", student.getIndexNumber());
+            }
+        });
+
+        removePanel.add(removeGradeButton);
+        removePanel.add(clearAllGradesButton);
+
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.add(addPanel, BorderLayout.NORTH);
+        topPanel.add(removePanel, BorderLayout.CENTER);
         topPanel.add(avgPanel, BorderLayout.SOUTH);
 
         dialog.add(topPanel, BorderLayout.NORTH);
@@ -1101,10 +1262,40 @@ public class StudentManagerSwing extends JFrame {
         studentTableModel.setRowCount(0);
 
         String selectedGroupName = groupList.getSelectedValue();
+
+        // If no group is selected, show all students (fixes the issue after CSV load)
         if (selectedGroupName == null) {
+            // Show all students from repository
+            for (Student student : studentRepo.getAll()) {
+                // Apply filter
+                if (!filter.isEmpty()) {
+                    String searchText = (student.getFirstName() + " " + student.getLastName() + " " +
+                                        student.getIndexNumber()).toLowerCase();
+                    if (!searchText.contains(filter)) {
+                        continue;
+                    }
+                }
+
+                String average = student.average().isPresent()
+                    ? String.format("%.2f", student.average().getAsDouble())
+                    : "N/A";
+
+                Object[] row = {
+                    student.getId(),
+                    student.getIndexNumber(),
+                    student.getFirstName(),
+                    student.getLastName(),
+                    student.getBirthDateString(),
+                    student.getGender(),
+                    average
+                };
+
+                studentTableModel.addRow(row);
+            }
             return;
         }
 
+        // Show students from selected group
         Group group = groupRepo.getByName(selectedGroupName);
         if (group == null) {
             return;
